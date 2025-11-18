@@ -1,3 +1,10 @@
+
+import java.text.MessageFormat;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -28,26 +35,26 @@ public class CafePos extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton14 = new javax.swing.JButton();
-        jButton15 = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
-        jButton17 = new javax.swing.JButton();
-        jButton18 = new javax.swing.JButton();
-        jButton19 = new javax.swing.JButton();
-        jButton20 = new javax.swing.JButton();
-        jButton21 = new javax.swing.JButton();
-        jButton22 = new javax.swing.JButton();
-        jButton23 = new javax.swing.JButton();
-        jButton24 = new javax.swing.JButton();
-        jButton25 = new javax.swing.JButton();
-        jButton26 = new javax.swing.JButton();
-        jButton27 = new javax.swing.JButton();
-        jButton28 = new javax.swing.JButton();
-        jButton29 = new javax.swing.JButton();
-        jButton30 = new javax.swing.JButton();
-        jButton31 = new javax.swing.JButton();
-        jButton32 = new javax.swing.JButton();
-        jButton33 = new javax.swing.JButton();
+        hotMatchalatte = new javax.swing.JButton();
+        Jbtnicelemontea = new javax.swing.JButton();
+        hotlatte = new javax.swing.JButton();
+        icecoffee = new javax.swing.JButton();
+        btnIceAmericano = new javax.swing.JButton();
+        jbtnMangoFrape = new javax.swing.JButton();
+        jbtnStrawberryFrape = new javax.swing.JButton();
+        jbtnLemonea = new javax.swing.JButton();
+        jbtncaramaldrink = new javax.swing.JButton();
+        jbtnIceMatchaLatte = new javax.swing.JButton();
+        jbtnHamBurger = new javax.swing.JButton();
+        jbtnjaozi = new javax.swing.JButton();
+        jbtnNoodle = new javax.swing.JButton();
+        jbtnFriesChicken = new javax.swing.JButton();
+        jbtnRiceWithPork = new javax.swing.JButton();
+        jbtnTiramisu = new javax.swing.JButton();
+        jbtncakeroll = new javax.swing.JButton();
+        jbtnPudding = new javax.swing.JButton();
+        jbtnblueBerrycake = new javax.swing.JButton();
+        jbtnChocolateCake = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jbtn9 = new javax.swing.JButton();
         jbtn7 = new javax.swing.JButton();
@@ -78,7 +85,7 @@ public class CafePos extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jtxtDisplay = new javax.swing.JTextField();
         jtxtChange = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jcbopayment = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
         jbtnPay = new javax.swing.JButton();
         jbtnExit = new javax.swing.JButton();
@@ -93,66 +100,185 @@ public class CafePos extends javax.swing.JFrame {
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton14.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton14, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, 130, 130));
+        hotMatchalatte.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        hotMatchalatte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/hotmatcha.jpg"))); // NOI18N
+        hotMatchalatte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hotMatchalatteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(hotMatchalatte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 130));
 
-        jButton15.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/andy-barbosa-XgH4sjl1Ozo-unsplash.jpg"))); // NOI18N
-        jPanel1.add(jButton15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 130));
+        Jbtnicelemontea.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Jbtnicelemontea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/hottea.jpg"))); // NOI18N
+        Jbtnicelemontea.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JbtnicelemonteaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Jbtnicelemontea, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, 130, 130));
 
-        jButton16.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton16, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 130, 130));
+        hotlatte.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        hotlatte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/hotlate.jpg"))); // NOI18N
+        hotlatte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hotlatteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(hotlatte, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 130, 130));
 
-        jButton17.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton17, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 130, 130));
+        icecoffee.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        icecoffee.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/milktea.jpg"))); // NOI18N
+        icecoffee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                icecoffeeActionPerformed(evt);
+            }
+        });
+        jPanel1.add(icecoffee, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 130, 130));
 
-        jButton18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton18, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, 130, 130));
+        btnIceAmericano.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnIceAmericano.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/IceAmericano.jpg"))); // NOI18N
+        btnIceAmericano.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIceAmericanoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnIceAmericano, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, 130, 130));
 
-        jButton19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton19, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 150, 130, 130));
+        jbtnMangoFrape.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnMangoFrape.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/mangofrape.jpg"))); // NOI18N
+        jbtnMangoFrape.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnMangoFrapeActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnMangoFrape, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 150, 130, 130));
 
-        jButton20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton20, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 150, 130, 130));
+        jbtnStrawberryFrape.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnStrawberryFrape.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/strawbeeryfrape.jpg"))); // NOI18N
+        jbtnStrawberryFrape.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnStrawberryFrapeActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnStrawberryFrape, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 150, 130, 130));
 
-        jButton21.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton21, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 150, 130, 130));
+        jbtnLemonea.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnLemonea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/lemonea.jpg"))); // NOI18N
+        jbtnLemonea.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnLemoneaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnLemonea, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 150, 130, 130));
 
-        jButton22.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton22, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 150, 130, 130));
+        jbtncaramaldrink.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtncaramaldrink.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/camramelFrape.jpg"))); // NOI18N
+        jbtncaramaldrink.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtncaramaldrinkActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtncaramaldrink, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 150, 130, 130));
 
-        jButton23.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton23, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 130, 130));
+        jbtnIceMatchaLatte.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnIceMatchaLatte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icematchalatte.jpg"))); // NOI18N
+        jbtnIceMatchaLatte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnIceMatchaLatteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnIceMatchaLatte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 130, 130));
 
-        jButton24.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton24, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 290, 130, 130));
+        jbtnHamBurger.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnHamBurger.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/burger.jpg"))); // NOI18N
+        jbtnHamBurger.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnHamBurgerActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnHamBurger, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 290, 130, 130));
 
-        jButton25.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton25, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 290, 130, 130));
+        jbtnjaozi.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnjaozi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/jouzi.jpg"))); // NOI18N
+        jbtnjaozi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnjaoziActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnjaozi, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 290, 130, 130));
 
-        jButton26.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton26, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, 130, 130));
+        jbtnNoodle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnNoodle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/noodel.jpg"))); // NOI18N
+        jbtnNoodle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnNoodleActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnNoodle, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, 130, 130));
 
-        jButton27.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton27, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 130, 130));
+        jbtnFriesChicken.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnFriesChicken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/chicken.jpg"))); // NOI18N
+        jbtnFriesChicken.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnFriesChickenActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnFriesChicken, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 130, 130));
 
-        jButton28.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton28, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 130, 130));
+        jbtnRiceWithPork.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnRiceWithPork.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/rice.jpg"))); // NOI18N
+        jbtnRiceWithPork.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnRiceWithPorkActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnRiceWithPork, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 130, 130));
 
-        jButton29.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton29, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 430, 130, 130));
+        jbtnTiramisu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnTiramisu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/tiramisu.jpg"))); // NOI18N
+        jbtnTiramisu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnTiramisuActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnTiramisu, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 430, 130, 130));
 
-        jButton30.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton30, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 430, 130, 130));
+        jbtncakeroll.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtncakeroll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/matchacake.jpg"))); // NOI18N
+        jbtncakeroll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtncakerollActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtncakeroll, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 430, 130, 130));
 
-        jButton31.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton31, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 430, 130, 130));
+        jbtnPudding.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnPudding.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/pudding.jpg"))); // NOI18N
+        jbtnPudding.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnPuddingActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnPudding, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 430, 130, 130));
 
-        jButton32.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton32, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 430, 130, 130));
+        jbtnblueBerrycake.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnblueBerrycake.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/blueberrycake.jpg"))); // NOI18N
+        jbtnblueBerrycake.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnblueBerrycakeActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnblueBerrycake, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 430, 130, 130));
 
-        jButton33.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jPanel1.add(jButton33, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 130, 130));
+        jbtnChocolateCake.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnChocolateCake.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/chocolatecake.jpg"))); // NOI18N
+        jbtnChocolateCake.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnChocolateCakeActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbtnChocolateCake, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 130, 130));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 50, 710, 570));
 
@@ -337,14 +463,14 @@ public class CafePos extends javax.swing.JFrame {
         jtxtChange.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jPanel5.add(jtxtChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 110, 170, -1));
 
-        jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Visa Card", "Master Card", " " }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        jcbopayment.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jcbopayment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Visa Card", "Master Card", " " }));
+        jcbopayment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                jcbopaymentActionPerformed(evt);
             }
         });
-        jPanel5.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 170, 40));
+        jPanel5.add(jcbopayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 170, 40));
 
         jPanel12.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, 480, 160));
 
@@ -363,21 +489,41 @@ public class CafePos extends javax.swing.JFrame {
 
         jbtnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jbtnExit.setText("EXIT");
+        jbtnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnExitActionPerformed(evt);
+            }
+        });
         jPanel6.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 260, 60));
 
         jbtnPrint.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jbtnPrint.setText("Print");
         jbtnPrint.setMaximumSize(new java.awt.Dimension(129, 35));
+        jbtnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnPrintActionPerformed(evt);
+            }
+        });
         jPanel6.add(jbtnPrint, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 10, 80, 70));
 
         jbtnReset.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jbtnReset.setText("Reset");
         jbtnReset.setMaximumSize(new java.awt.Dimension(129, 35));
+        jbtnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnResetActionPerformed(evt);
+            }
+        });
         jPanel6.add(jbtnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 80, 70));
 
         jbtnRemove.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jbtnRemove.setText("Remove");
         jbtnRemove.setMaximumSize(new java.awt.Dimension(129, 35));
+        jbtnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnRemoveActionPerformed(evt);
+            }
+        });
         jPanel6.add(jbtnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 10, 80, 70));
 
         jPanel12.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 10, 440, 160));
@@ -397,16 +543,54 @@ public class CafePos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 //Function.,,,,,,
     public void ItemCost(){
-//        double sum = 0;
-//        for (int i = 0;i < jTable1.getRowCount();i++){
-//            sum += Double.parseDouble(jTable1.getValueAt(i, 2).toString());
-//        }
-//        jtxtSubTotal.setText(Double.parseDouble(sum));
+        double sum = 0;
+        for (int i = 0;i < jTable1.getRowCount();i++){
+            sum += Double.parseDouble(jTable1.getValueAt(i, 2).toString());
+        }
+        jtxtSubTotal.setText(Double.toString(sum));
+        double cTOtal1 =  Double.parseDouble(jtxtSubTotal.getText());
+        double cTax = (cTOtal1  * 3.9)/100;
+        
+        String iTaxTotal  = String.format("$ %.2f", cTax);
+        jtxtTax.setText(iTaxTotal);
+        
+        String iSubTotal  = String.format("$ %.2f", cTOtal1);
+        jtxtSubTotal.setText(iSubTotal);
+        
+        String iTotal  = String.format("$ %.2f", cTOtal1 + cTax);
+        jtxtTotal.setText(iTotal);
+        
+        
+        String BarCode  = String.format("Total is $ %.2f", cTOtal1 + cTax);
+        jtxtBarCode.setText(BarCode);
         
     }
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    
+    
+    //function change////
+    public void Change(){
+        double sum = 0;
+        double tax= 3.9;
+        double cash = Double.parseDouble(jtxtDisplay.getText());
+        
+        
+          for (int i = 0;i < jTable1.getRowCount();i++)
+        {
+            sum += Double.parseDouble(jTable1.getValueAt(i, 2).toString());
+        }
+          
+          double cTax = (sum  * 3.9)/100;
+          double cChange = (cash - (sum + cTax));
+          
+          
+          String ChangeGiven = String.format("$ %.2f",cChange);
+          jtxtChange.setText(ChangeGiven);
+        
+    }
+    
+    private void jcbopaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbopaymentActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_jcbopaymentActionPerformed
 
     private void jtxtBarCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtBarCodeActionPerformed
         // TODO add your handling code here:
@@ -544,8 +728,256 @@ public class CafePos extends javax.swing.JFrame {
 
     private void jbtnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPayActionPerformed
         // TODO add your handling code here:
+        if(jcbopayment.getSelectedItem().equals("Cash"))
+        {
+            Change();
+        }else{
+        jtxtChange.setText("");
+        jtxtDisplay.setText("");
+         }
+        
     }//GEN-LAST:event_jbtnPayActionPerformed
 
+    private void hotMatchalatteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hotMatchalatteActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 3.00;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Hot matcha latte","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_hotMatchalatteActionPerformed
+
+    private void jbtncaramaldrinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtncaramaldrinkActionPerformed
+        // TODO add your handling code here:
+        
+        double PriceOfItem = 3.50;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"caramel coffee","1",PriceOfItem });
+        ItemCost();
+        
+    }//GEN-LAST:event_jbtncaramaldrinkActionPerformed
+
+    private void jbtnIceMatchaLatteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnIceMatchaLatteActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 3.50;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Ice Matcha Latte","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnIceMatchaLatteActionPerformed
+
+    private void hotlatteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hotlatteActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 2.5;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"caramel coffee","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_hotlatteActionPerformed
+
+    private void icecoffeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_icecoffeeActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 1.75;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"ice coffee","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_icecoffeeActionPerformed
+
+    private void btnIceAmericanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIceAmericanoActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 1.50;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Ice Americano","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_btnIceAmericanoActionPerformed
+
+    private void JbtnicelemonteaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnicelemonteaActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 1.00;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Ice Lemon tea","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_JbtnicelemonteaActionPerformed
+
+    private void jbtnLemoneaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnLemoneaActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 1.85;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Ice Lemon Tea","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnLemoneaActionPerformed
+
+    private void jbtnStrawberryFrapeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnStrawberryFrapeActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 3.50;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Strawberry Frape","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnStrawberryFrapeActionPerformed
+
+    private void jbtnMangoFrapeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnMangoFrapeActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 3.25;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Mango Frape","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnMangoFrapeActionPerformed
+
+    private void jbtnRiceWithPorkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRiceWithPorkActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 3.50;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Rice With Fries Pork","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnRiceWithPorkActionPerformed
+
+    private void jbtnFriesChickenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnFriesChickenActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 5.00;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"set of Fries Chichen","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnFriesChickenActionPerformed
+
+    private void jbtnNoodleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnNoodleActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 2.35;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Noodle","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnNoodleActionPerformed
+
+    private void jbtnjaoziActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnjaoziActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 3.25;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Jao Zi","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnjaoziActionPerformed
+
+    private void jbtnHamBurgerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnHamBurgerActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 3.00;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Chicken Humberger","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnHamBurgerActionPerformed
+
+    private void jbtnChocolateCakeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnChocolateCakeActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 3.75;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Chocolate cake","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnChocolateCakeActionPerformed
+
+    private void jbtnblueBerrycakeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnblueBerrycakeActionPerformed
+        // TODO add your handling code here:
+         double PriceOfItem = 3.75;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Blueberry cake","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnblueBerrycakeActionPerformed
+
+    private void jbtnTiramisuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnTiramisuActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 3.75;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Tiramisu cake","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnTiramisuActionPerformed
+
+    private void jbtncakerollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtncakerollActionPerformed
+        // TODO add your handling code here:
+          double PriceOfItem = 3.00;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Matcha cake Roll","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtncakerollActionPerformed
+
+    private void jbtnPuddingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPuddingActionPerformed
+        // TODO add your handling code here:  double PriceOfItem = 3.75;
+        
+        double PriceOfItem = 2.00;
+        
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Pudding cake","1",PriceOfItem });
+        ItemCost();
+    }//GEN-LAST:event_jbtnPuddingActionPerformed
+
+    private void jbtnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnResetActionPerformed
+        // TODO add your handling code here:
+        
+         
+        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        jtxtChange.setText("");
+        jtxtTax.setText("");
+        jtxtTotal.setText("");
+        jtxtSubTotal.setText("");
+        jtxtDisplay.setText("");
+        jtxtBarCode.setText("");
+        
+    }//GEN-LAST:event_jbtnResetActionPerformed
+
+    private void jbtnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPrintActionPerformed
+        // TODO add your handling code here:
+        MessageFormat header = new MessageFormat("Printing in the progress");
+        MessageFormat footer = new MessageFormat("page {0,  number, integer}");
+        
+        try{
+            jTable1.print(JTable.PrintMode.NORMAL, header, footer);
+        }
+        catch(java.awt.print.PrinterException e)
+        {
+            System.err.format("No Printer found", e.getMessage());
+        }
+        
+    }//GEN-LAST:event_jbtnPrintActionPerformed
+
+    private void jbtnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRemoveActionPerformed
+        // TODO add your handling code here:
+         DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+         
+         int RemoveItem = jTable1.getSelectedRow();
+         if(RemoveItem > 0 ){
+             model.removeRow(RemoveItem);
+         }
+         ItemCost();
+         
+         if(jcbopayment.getSelectedItem().equals("Cash"))
+         {
+             Change();
+         }else{
+              jtxtDisplay.setText("");
+            jtxtChange.setText("");
+         }
+         
+    }//GEN-LAST:event_jbtnRemoveActionPerformed
+
+    private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed
+        // TODO add your handling code here:
+        frame = new JFrame("{Exit");
+        if(JOptionPane.showConfirmDialog(frame,"Confirm if you want to exit", "Point of sales",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION);
+    }//GEN-LAST:event_jbtnExitActionPerformed
+     
+    private JFrame frame;
     /**
      * @param args the command line arguments
      */
@@ -572,27 +1004,11 @@ public class CafePos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton18;
-    private javax.swing.JButton jButton19;
-    private javax.swing.JButton jButton20;
-    private javax.swing.JButton jButton21;
-    private javax.swing.JButton jButton22;
-    private javax.swing.JButton jButton23;
-    private javax.swing.JButton jButton24;
-    private javax.swing.JButton jButton25;
-    private javax.swing.JButton jButton26;
-    private javax.swing.JButton jButton27;
-    private javax.swing.JButton jButton28;
-    private javax.swing.JButton jButton29;
-    private javax.swing.JButton jButton30;
-    private javax.swing.JButton jButton31;
-    private javax.swing.JButton jButton32;
-    private javax.swing.JButton jButton33;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton Jbtnicelemontea;
+    private javax.swing.JButton btnIceAmericano;
+    private javax.swing.JButton hotMatchalatte;
+    private javax.swing.JButton hotlatte;
+    private javax.swing.JButton icecoffee;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -619,12 +1035,28 @@ public class CafePos extends javax.swing.JFrame {
     private javax.swing.JButton jbtn8;
     private javax.swing.JButton jbtn9;
     private javax.swing.JButton jbtnC;
+    private javax.swing.JButton jbtnChocolateCake;
     private javax.swing.JButton jbtnDot;
     private javax.swing.JButton jbtnExit;
+    private javax.swing.JButton jbtnFriesChicken;
+    private javax.swing.JButton jbtnHamBurger;
+    private javax.swing.JButton jbtnIceMatchaLatte;
+    private javax.swing.JButton jbtnLemonea;
+    private javax.swing.JButton jbtnMangoFrape;
+    private javax.swing.JButton jbtnNoodle;
     private javax.swing.JButton jbtnPay;
     private javax.swing.JButton jbtnPrint;
+    private javax.swing.JButton jbtnPudding;
     private javax.swing.JButton jbtnRemove;
     private javax.swing.JButton jbtnReset;
+    private javax.swing.JButton jbtnRiceWithPork;
+    private javax.swing.JButton jbtnStrawberryFrape;
+    private javax.swing.JButton jbtnTiramisu;
+    private javax.swing.JButton jbtnblueBerrycake;
+    private javax.swing.JButton jbtncakeroll;
+    private javax.swing.JButton jbtncaramaldrink;
+    private javax.swing.JButton jbtnjaozi;
+    private javax.swing.JComboBox<String> jcbopayment;
     private javax.swing.JTextField jtxtBarCode;
     private javax.swing.JTextField jtxtChange;
     private javax.swing.JTextField jtxtDisplay;
