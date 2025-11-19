@@ -1001,7 +1001,7 @@
     <Component class="javax.swing.JTextField" name="jtxtBarCode">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="IDAutomationHC39M Free Version" size="14" style="0"/>
+          <Font name="barcode font" size="52" style="0"/>
         </Property>
       </Properties>
       <Events>

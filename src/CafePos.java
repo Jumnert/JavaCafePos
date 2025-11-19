@@ -530,7 +530,7 @@ public class CafePos extends javax.swing.JFrame {
 
         getContentPane().add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 630, 1400, 180));
 
-        jtxtBarCode.setFont(new java.awt.Font("IDAutomationHC39M Free Version", 0, 14)); // NOI18N
+        jtxtBarCode.setFont(new java.awt.Font("barcode font", 0, 52)); // NOI18N
         jtxtBarCode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtxtBarCodeActionPerformed(evt);
