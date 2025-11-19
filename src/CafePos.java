@@ -1,9 +1,50 @@
-
+import java.sql.*;
 import java.text.MessageFormat;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import com.formdev.flatlaf.FlatDarkLaf;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import javax.swing.table.DefaultTableModel;
+import java.awt.Font;
+import java.awt.print.PrinterException;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import java.text.MessageFormat;
+import javax.swing.JTable;
+import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
+import javax.swing.*;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.function.BiConsumer;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
+
+
+
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -14,7 +55,10 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Jumnert
  */
-public class CafePos extends javax.swing.JFrame {
+public class CafePos extends javax.swing.JFrame  {
+    PDType1Font font = PDType1Font.HELVETICA;
+final float[] yPos = {750f};
+    private ItemManager itemManager = new ItemManager();
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CafePos.class.getName());
 
@@ -22,8 +66,66 @@ public class CafePos extends javax.swing.JFrame {
      * Creates new form CafePos
      */
     public CafePos() {
-        initComponents();
+          initComponents();
+            showDate();
     }
+    private void showDate() {
+    java.time.LocalDate today = java.time.LocalDate.now();
+    java.time.format.DateTimeFormatter fmt =
+            java.time.format.DateTimeFormatter.ofPattern("MMMM dd, yyyy");
+
+    jlblDate.setText(today.format(fmt));
+}
+    
+public class DBConnection {
+     private static final String URL = "jdbc:mysql://localhost:3306/cafepos?useSSL=false&serverTimezone=UTC";
+    private static final String USER = "root";
+    private static final String PASS = "nith2020";
+
+    public static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return DriverManager.getConnection(URL, USER, PASS);
+    }
+}
+
+private OrderManager orderManager = new OrderManager();
+
+
+private double calculateTotal(DefaultTableModel model){
+    double sum = 0;
+    for(int i = 0; i < model.getRowCount(); i++){
+        sum += Double.parseDouble(model.getValueAt(i, 2).toString());
+    }
+    return sum + (sum * 0.039); // including tax
+}
+
+private int getItemId(String name, double price){
+    int id = 0;
+    try (Connection conn = DBConnection.getConnection()) {
+        PreparedStatement pst = conn.prepareStatement("SELECT item_id FROM items WHERE name=?");
+        pst.setString(1, name);
+        ResultSet rs = pst.executeQuery();
+        if(rs.next()) {
+            id = rs.getInt("item_id");
+        } else {
+            // Item does not exist, optionally insert it
+            PreparedStatement insert = conn.prepareStatement(
+                "INSERT INTO items(name, price) VALUES(?, ?) ", Statement.RETURN_GENERATED_KEYS);
+            insert.setString(1, name);
+            insert.setDouble(2, price);; // default price 0 if unknown
+            insert.executeUpdate();
+            ResultSet keys = insert.getGeneratedKeys();
+            if(keys.next()) id = keys.getInt(1);
+        }
+    } catch(SQLException e){
+        e.printStackTrace();
+    }
+    return id;
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -68,46 +170,51 @@ public class CafePos extends javax.swing.JFrame {
         jbtn3 = new javax.swing.JButton();
         jbtn2 = new javax.swing.JButton();
         jbtn1 = new javax.swing.JButton();
+        jtxtSubTotal = new javax.swing.JTextField();
+        jtxtTax = new javax.swing.JTextField();
+        jtxtTotal = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        jPanel12 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jtxtTotal = new javax.swing.JTextField();
-        jtxtSubTotal = new javax.swing.JTextField();
-        jtxtTax = new javax.swing.JTextField();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jtxtDisplay = new javax.swing.JTextField();
-        jtxtChange = new javax.swing.JTextField();
-        jcbopayment = new javax.swing.JComboBox<>();
+        jtxtBarCode = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jbtnPay = new javax.swing.JButton();
-        jbtnExit = new javax.swing.JButton();
-        jbtnPrint = new javax.swing.JButton();
         jbtnReset = new javax.swing.JButton();
         jbtnRemove = new javax.swing.JButton();
-        jtxtBarCode = new javax.swing.JTextField();
+        jbtnPrint = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jbtnExit = new javax.swing.JButton();
+        jPanel8 = new javax.swing.JPanel();
+        jlblDate = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jtxtDisplay = new javax.swing.JTextField();
+        jcbopayment = new javax.swing.JComboBox<>();
+        jtxtChange = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
+        setBackground(new java.awt.Color(204, 204, 204));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         hotMatchalatte.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         hotMatchalatte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/hotmatcha.jpg"))); // NOI18N
+        hotMatchalatte.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         hotMatchalatte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hotMatchalatteActionPerformed(evt);
             }
         });
-        jPanel1.add(hotMatchalatte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 130));
+        jPanel1.add(hotMatchalatte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 570, 130, 130));
 
         Jbtnicelemontea.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Jbtnicelemontea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/hottea.jpg"))); // NOI18N
@@ -116,284 +223,335 @@ public class CafePos extends javax.swing.JFrame {
                 JbtnicelemonteaActionPerformed(evt);
             }
         });
-        jPanel1.add(Jbtnicelemontea, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, 130, 130));
+        jPanel1.add(Jbtnicelemontea, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, 130, 130));
 
         hotlatte.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         hotlatte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/hotlate.jpg"))); // NOI18N
+        hotlatte.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         hotlatte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hotlatteActionPerformed(evt);
             }
         });
-        jPanel1.add(hotlatte, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 130, 130));
+        jPanel1.add(hotlatte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 130));
 
         icecoffee.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         icecoffee.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/milktea.jpg"))); // NOI18N
+        icecoffee.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         icecoffee.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 icecoffeeActionPerformed(evt);
             }
         });
-        jPanel1.add(icecoffee, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 130, 130));
+        jPanel1.add(icecoffee, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 130, 130));
 
         btnIceAmericano.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnIceAmericano.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/IceAmericano.jpg"))); // NOI18N
+        btnIceAmericano.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnIceAmericano.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIceAmericanoActionPerformed(evt);
             }
         });
-        jPanel1.add(btnIceAmericano, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, 130, 130));
+        jPanel1.add(btnIceAmericano, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 130, 130));
 
         jbtnMangoFrape.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnMangoFrape.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/mangofrape.jpg"))); // NOI18N
+        jbtnMangoFrape.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnMangoFrape.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnMangoFrapeActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnMangoFrape, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 150, 130, 130));
+        jPanel1.add(jbtnMangoFrape, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 150, 130, 130));
 
         jbtnStrawberryFrape.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnStrawberryFrape.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/strawbeeryfrape.jpg"))); // NOI18N
+        jbtnStrawberryFrape.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnStrawberryFrape.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnStrawberryFrapeActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnStrawberryFrape, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 150, 130, 130));
+        jPanel1.add(jbtnStrawberryFrape, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 150, 130, 130));
 
         jbtnLemonea.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnLemonea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/lemonea.jpg"))); // NOI18N
+        jbtnLemonea.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnLemonea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnLemoneaActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnLemonea, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 150, 130, 130));
+        jPanel1.add(jbtnLemonea, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 150, 130, 130));
 
         jbtncaramaldrink.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtncaramaldrink.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/camramelFrape.jpg"))); // NOI18N
+        jbtncaramaldrink.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtncaramaldrink.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtncaramaldrinkActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtncaramaldrink, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 150, 130, 130));
+        jPanel1.add(jbtncaramaldrink, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 130, 130));
 
         jbtnIceMatchaLatte.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnIceMatchaLatte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/icematchalatte.jpg"))); // NOI18N
+        jbtnIceMatchaLatte.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnIceMatchaLatte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnIceMatchaLatteActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnIceMatchaLatte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 130, 130));
+        jPanel1.add(jbtnIceMatchaLatte, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 570, 130, 130));
 
         jbtnHamBurger.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnHamBurger.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/burger.jpg"))); // NOI18N
+        jbtnHamBurger.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnHamBurger.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnHamBurgerActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnHamBurger, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 290, 130, 130));
+        jPanel1.add(jbtnHamBurger, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 290, 130, 130));
 
         jbtnjaozi.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnjaozi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/jouzi.jpg"))); // NOI18N
+        jbtnjaozi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnjaozi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnjaoziActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnjaozi, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 290, 130, 130));
+        jPanel1.add(jbtnjaozi, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, 130, 130));
 
         jbtnNoodle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnNoodle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/noodel.jpg"))); // NOI18N
+        jbtnNoodle.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnNoodle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnNoodleActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnNoodle, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, 130, 130));
+        jPanel1.add(jbtnNoodle, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 130, 130));
 
         jbtnFriesChicken.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnFriesChicken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/chicken.jpg"))); // NOI18N
+        jbtnFriesChicken.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnFriesChicken.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnFriesChickenActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnFriesChicken, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 290, 130, 130));
+        jPanel1.add(jbtnFriesChicken, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 130, 130));
 
         jbtnRiceWithPork.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnRiceWithPork.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/rice.jpg"))); // NOI18N
+        jbtnRiceWithPork.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnRiceWithPork.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnRiceWithPorkActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnRiceWithPork, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 130, 130));
+        jPanel1.add(jbtnRiceWithPork, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 570, 130, 130));
 
         jbtnTiramisu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnTiramisu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/tiramisu.jpg"))); // NOI18N
+        jbtnTiramisu.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnTiramisu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnTiramisuActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnTiramisu, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 430, 130, 130));
+        jPanel1.add(jbtnTiramisu, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 430, 130, 130));
 
         jbtncakeroll.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtncakeroll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/matchacake.jpg"))); // NOI18N
+        jbtncakeroll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtncakeroll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtncakerollActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtncakeroll, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 430, 130, 130));
+        jPanel1.add(jbtncakeroll, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 430, 130, 130));
 
         jbtnPudding.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnPudding.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/pudding.jpg"))); // NOI18N
+        jbtnPudding.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnPudding.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnPuddingActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnPudding, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 430, 130, 130));
+        jPanel1.add(jbtnPudding, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 430, 130, 130));
 
         jbtnblueBerrycake.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnblueBerrycake.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/blueberrycake.jpg"))); // NOI18N
+        jbtnblueBerrycake.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnblueBerrycake.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnblueBerrycakeActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnblueBerrycake, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 430, 130, 130));
+        jPanel1.add(jbtnblueBerrycake, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 130, 130));
 
         jbtnChocolateCake.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jbtnChocolateCake.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/chocolatecake.jpg"))); // NOI18N
+        jbtnChocolateCake.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnChocolateCake.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnChocolateCakeActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnChocolateCake, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, 130, 130));
+        jPanel1.add(jbtnChocolateCake, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 570, 130, 130));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 50, 710, 570));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 90, 570, 710));
 
-        jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jbtn9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtn9.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jbtn9.setText("9");
+        jbtn9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtn9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtn9ActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtn9, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 80, 80));
+        jPanel2.add(jbtn9, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 80, 80));
 
-        jbtn7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtn7.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jbtn7.setText("7");
+        jbtn7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtn7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtn7ActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtn7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 80, 80));
+        jPanel2.add(jbtn7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 80, 80));
 
-        jbtn8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtn8.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jbtn8.setText("8");
+        jbtn8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtn8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtn8ActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtn8, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, 80, 80));
+        jPanel2.add(jbtn8, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, 80, 80));
 
-        jbtn4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtn4.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jbtn4.setText("4");
+        jbtn4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtn4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtn4ActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtn4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 80, 80));
+        jPanel2.add(jbtn4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 80, 80));
 
-        jbtn5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtn5.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jbtn5.setText("5");
+        jbtn5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtn5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtn5ActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtn5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 80, 80));
+        jPanel2.add(jbtn5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, 80, 80));
 
-        jbtn6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtn6.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jbtn6.setText("6");
+        jbtn6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtn6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtn6ActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtn6, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 80, 80));
+        jPanel2.add(jbtn6, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 100, 80, 80));
 
-        jbtnDot.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnDot.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jbtnDot.setText(".");
+        jbtnDot.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnDot.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnDotActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtnDot, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, 80, 80));
+        jPanel2.add(jbtnDot, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 280, 80, 80));
 
-        jbtnC.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtnC.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jbtnC.setText("C");
+        jbtnC.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtnC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnCActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtnC, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 290, 80, 80));
+        jPanel2.add(jbtnC, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 280, 80, 80));
 
-        jbtn0.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtn0.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jbtn0.setText("0");
+        jbtn0.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtn0.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtn0ActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtn0, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 80, 80));
+        jPanel2.add(jbtn0, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 80, 80));
 
-        jbtn3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtn3.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jbtn3.setText("3");
+        jbtn3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtn3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtn3ActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, 80, 80));
+        jPanel2.add(jbtn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 190, 80, 80));
 
-        jbtn2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtn2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jbtn2.setText("2");
+        jbtn2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtn2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtn2ActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, 80, 80));
+        jPanel2.add(jbtn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 190, 80, 80));
 
-        jbtn1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jbtn1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jbtn1.setText("1");
+        jbtn1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jbtn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtn1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jbtn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 80, 80));
+        jPanel2.add(jbtn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 80, 80));
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 300, 570));
+        jtxtSubTotal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jPanel2.add(jtxtSubTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 370, 110, -1));
+
+        jtxtTax.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jPanel2.add(jtxtTax, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 420, 110, -1));
+
+        jtxtTotal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jPanel2.add(jtxtTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 470, 110, -1));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setText("SubTotal");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("Tax");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, -1, -1));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setText("Total");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, -1, -1));
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 90, 300, 520));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -405,63 +563,117 @@ public class CafePos extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 50, 370, 510));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1220, 90, 370, 650));
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 700, -1, -1));
 
-        jPanel12.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel12.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jtxtBarCode.setFont(new java.awt.Font("barcode font", 0, 52)); // NOI18N
+        jtxtBarCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtxtBarCodeActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jtxtBarCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(1220, 740, 370, 60));
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel4.setPreferredSize(new java.awt.Dimension(170, 104));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel6.setPreferredSize(new java.awt.Dimension(170, 104));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
-        jLabel1.setText("Total");
-        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
+        jbtnPay.setBackground(new java.awt.Color(0, 153, 255));
+        jbtnPay.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jbtnPay.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnPay.setText("PAY");
+        jbtnPay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnPayActionPerformed(evt);
+            }
+        });
+        jPanel6.add(jbtnPay, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 370, 70));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
-        jLabel2.setText("SubTotal");
-        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+        jbtnReset.setBackground(new java.awt.Color(255, 153, 153));
+        jbtnReset.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jbtnReset.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/reset.png"))); // NOI18N
+        jbtnReset.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jbtnReset.setMaximumSize(new java.awt.Dimension(129, 35));
+        jbtnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnResetActionPerformed(evt);
+            }
+        });
+        jPanel6.add(jbtnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, 80, 70));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
-        jLabel3.setText("Tax");
-        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
+        jbtnRemove.setBackground(new java.awt.Color(255, 51, 51));
+        jbtnRemove.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jbtnRemove.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/trash.png"))); // NOI18N
+        jbtnRemove.setText("Remove");
+        jbtnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jbtnRemove.setMaximumSize(new java.awt.Dimension(129, 35));
+        jbtnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnRemoveActionPerformed(evt);
+            }
+        });
+        jPanel6.add(jbtnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 190, 70));
 
-        jtxtTotal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jPanel4.add(jtxtTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, 180, -1));
+        jbtnPrint.setBackground(new java.awt.Color(51, 204, 255));
+        jbtnPrint.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jbtnPrint.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/printer (1).png"))); // NOI18N
+        jbtnPrint.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jbtnPrint.setMaximumSize(new java.awt.Dimension(129, 35));
+        jbtnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnPrintActionPerformed(evt);
+            }
+        });
+        jPanel6.add(jbtnPrint, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 80, 70));
 
-        jtxtSubTotal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jPanel4.add(jtxtSubTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, 180, -1));
+        getContentPane().add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1210, 800, 400, 180));
 
-        jtxtTax.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jPanel4.add(jtxtTax, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 60, 180, -1));
+        jPanel7.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel12.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 440, 160));
+        jbtnExit.setBackground(new java.awt.Color(255, 51, 0));
+        jbtnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jbtnExit.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/logout.png"))); // NOI18N
+        jbtnExit.setText("EXIT");
+        jbtnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnExitActionPerformed(evt);
+            }
+        });
+        jPanel7.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 830, 290, 60));
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel5.setPreferredSize(new java.awt.Dimension(170, 104));
-        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 310, 900));
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        jPanel8.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jlblDate.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel8.add(jlblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1400, 20, 180, 30));
+
+        getContentPane().add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 1590, 70));
+
+        jPanel9.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel7.setText("Change");
-        jPanel5.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
+        jPanel9.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
-        jLabel8.setText("Cash");
-        jPanel5.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel9.setText("Payment Method");
-        jPanel5.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+        jPanel9.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 250, -1));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel8.setText("Cash");
+        jPanel9.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
         jtxtDisplay.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jPanel5.add(jtxtDisplay, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 60, 170, -1));
-
-        jtxtChange.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jPanel5.add(jtxtChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 110, 170, -1));
+        jPanel9.add(jtxtDisplay, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 60, 110, -1));
 
         jcbopayment.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jcbopayment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Visa Card", "Master Card", " " }));
@@ -470,128 +682,58 @@ public class CafePos extends javax.swing.JFrame {
                 jcbopaymentActionPerformed(evt);
             }
         });
-        jPanel5.add(jcbopayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 170, 40));
+        jPanel9.add(jcbopayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, 110, 40));
 
-        jPanel12.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, 480, 160));
+        jtxtChange.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jPanel9.add(jtxtChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 110, 110, -1));
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel6.setPreferredSize(new java.awt.Dimension(170, 104));
-        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jbtnPay.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jbtnPay.setText("PAY");
-        jbtnPay.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnPayActionPerformed(evt);
-            }
-        });
-        jPanel6.add(jbtnPay, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 140, 140));
-
-        jbtnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jbtnExit.setText("EXIT");
-        jbtnExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnExitActionPerformed(evt);
-            }
-        });
-        jPanel6.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 260, 60));
-
-        jbtnPrint.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jbtnPrint.setText("Print");
-        jbtnPrint.setMaximumSize(new java.awt.Dimension(129, 35));
-        jbtnPrint.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnPrintActionPerformed(evt);
-            }
-        });
-        jPanel6.add(jbtnPrint, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 10, 80, 70));
-
-        jbtnReset.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jbtnReset.setText("Reset");
-        jbtnReset.setMaximumSize(new java.awt.Dimension(129, 35));
-        jbtnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnResetActionPerformed(evt);
-            }
-        });
-        jPanel6.add(jbtnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 80, 70));
-
-        jbtnRemove.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jbtnRemove.setText("Remove");
-        jbtnRemove.setMaximumSize(new java.awt.Dimension(129, 35));
-        jbtnRemove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnRemoveActionPerformed(evt);
-            }
-        });
-        jPanel6.add(jbtnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 10, 80, 70));
-
-        jPanel12.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 10, 440, 160));
-
-        getContentPane().add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 630, 1400, 180));
-
-        jtxtBarCode.setFont(new java.awt.Font("barcode font", 0, 52)); // NOI18N
-        jtxtBarCode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtxtBarCodeActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jtxtBarCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 560, 370, 60));
+        getContentPane().add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 620, 300, 180));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 //Function.,,,,,,
     public void ItemCost(){
-        double sum = 0;
-        for (int i = 0;i < jTable1.getRowCount();i++){
+         double sum = 0;
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
             sum += Double.parseDouble(jTable1.getValueAt(i, 2).toString());
         }
-        jtxtSubTotal.setText(Double.toString(sum));
-        double cTOtal1 =  Double.parseDouble(jtxtSubTotal.getText());
-        double cTax = (cTOtal1  * 3.9)/100;
         
-        String iTaxTotal  = String.format("$ %.2f", cTax);
-        jtxtTax.setText(iTaxTotal);
+        double cTax = (sum * 3.9) / 100;
+        double cTotal = sum + cTax;
         
-        String iSubTotal  = String.format("$ %.2f", cTOtal1);
-        jtxtSubTotal.setText(iSubTotal);
-        
-        String iTotal  = String.format("$ %.2f", cTOtal1 + cTax);
-        jtxtTotal.setText(iTotal);
-        
-        
-        String BarCode  = String.format("Total is $ %.2f", cTOtal1 + cTax);
-        jtxtBarCode.setText(BarCode);
+        jtxtSubTotal.setText(String.format("$ %.2f", sum));
+        jtxtTax.setText(String.format("$ %.2f", cTax));
+        jtxtTotal.setText(String.format("$ %.2f", cTotal));
+        jtxtBarCode.setText(String.format("Total is $ %.2f", cTotal));
         
     }
     
     
     //function change////
     public void Change(){
-        double sum = 0;
-        double tax= 3.9;
-        double cash = Double.parseDouble(jtxtDisplay.getText());
-        
-        
-          for (int i = 0;i < jTable1.getRowCount();i++)
-        {
-            sum += Double.parseDouble(jTable1.getValueAt(i, 2).toString());
+        try {
+            double sum = 0;
+            double cash = Double.parseDouble(jtxtDisplay.getText());
+            
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                sum += Double.parseDouble(jTable1.getValueAt(i, 2).toString());
+            }
+            
+            double cTax = (sum * 3.9) / 100;
+            double cChange = cash - (sum + cTax);
+            
+            if (cChange < 0) {
+                JOptionPane.showMessageDialog(this, "Insufficient cash payment!", "Error", JOptionPane.ERROR_MESSAGE);
+                jtxtChange.setText("$ 0.00");
+            } else {
+                jtxtChange.setText(String.format("$ %.2f", cChange));
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid cash amount!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-          
-          double cTax = (sum  * 3.9)/100;
-          double cChange = (cash - (sum + cTax));
-          
-          
-          String ChangeGiven = String.format("$ %.2f",cChange);
-          jtxtChange.setText(ChangeGiven);
-        
     }
     
-    private void jcbopaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbopaymentActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jcbopaymentActionPerformed
-
     private void jtxtBarCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtBarCodeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jtxtBarCodeActionPerformed
@@ -618,18 +760,21 @@ public class CafePos extends javax.swing.JFrame {
         } else {
             jtxtDisplay.setText(Enternumber + ".");
         }
-    }
+    }if (jcbopayment.getSelectedItem().equals("Cash")) {
+    Change();
+}
     }//GEN-LAST:event_jbtnDotActionPerformed
 
     private void jbtn7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn7ActionPerformed
-       String Enternumber = jtxtDisplay.getText();
-       if(Enternumber == ""){
-           jtxtDisplay.setText(jbtn7.getText());
-       }
-       else{
-           Enternumber = jtxtDisplay.getText() + jbtn7.getText();
-           jtxtDisplay.setText(Enternumber);
-       }
+          String Enternumber = jtxtDisplay.getText();
+        if (Enternumber.equals("")) {  // FIXED: was using ==
+            jtxtDisplay.setText(jbtn7.getText());
+        } else {
+            Enternumber = jtxtDisplay.getText() + jbtn7.getText();
+            jtxtDisplay.setText(Enternumber);
+        }if (jcbopayment.getSelectedItem().equals("Cash")) {
+    Change();
+}
     }//GEN-LAST:event_jbtn7ActionPerformed
 
     private void jbtn8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn8ActionPerformed
@@ -640,7 +785,9 @@ public class CafePos extends javax.swing.JFrame {
     } else {
         Enternumber = Enternumber + jbtn8.getText();
         jtxtDisplay.setText(Enternumber);
-    }
+    }if (jcbopayment.getSelectedItem().equals("Cash")) {
+    Change();
+}
     }//GEN-LAST:event_jbtn8ActionPerformed
 
     private void jbtn9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn9ActionPerformed
@@ -651,7 +798,9 @@ public class CafePos extends javax.swing.JFrame {
     } else {
         Enternumber = Enternumber + jbtn9.getText();
         jtxtDisplay.setText(Enternumber);
-    }
+    }if (jcbopayment.getSelectedItem().equals("Cash")) {
+    Change();
+}
     }//GEN-LAST:event_jbtn9ActionPerformed
 
     private void jbtn4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn4ActionPerformed
@@ -662,7 +811,9 @@ public class CafePos extends javax.swing.JFrame {
     } else {
         Enternumber = Enternumber + jbtn4.getText();
         jtxtDisplay.setText(Enternumber);
-    }
+    }if (jcbopayment.getSelectedItem().equals("Cash")) {
+    Change();
+}
     }//GEN-LAST:event_jbtn4ActionPerformed
 
     private void jbtn5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn5ActionPerformed
@@ -673,7 +824,9 @@ public class CafePos extends javax.swing.JFrame {
     } else {
         Enternumber = Enternumber + jbtn5.getText();
         jtxtDisplay.setText(Enternumber);
-    }
+    }if (jcbopayment.getSelectedItem().equals("Cash")) {
+    Change();
+}
     }//GEN-LAST:event_jbtn5ActionPerformed
 
     private void jbtn6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn6ActionPerformed
@@ -684,7 +837,9 @@ public class CafePos extends javax.swing.JFrame {
     } else {
         Enternumber = Enternumber + jbtn6.getText();
         jtxtDisplay.setText(Enternumber);
-    }
+    }if (jcbopayment.getSelectedItem().equals("Cash")) {
+    Change();
+}
     }//GEN-LAST:event_jbtn6ActionPerformed
 
     private void jbtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn1ActionPerformed
@@ -695,7 +850,9 @@ public class CafePos extends javax.swing.JFrame {
     } else {
         Enternumber = Enternumber + jbtn1.getText();
         jtxtDisplay.setText(Enternumber);
-    }
+    }if (jcbopayment.getSelectedItem().equals("Cash")) {
+    Change();
+}
     }//GEN-LAST:event_jbtn1ActionPerformed
 
     private void jbtn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn3ActionPerformed
@@ -706,7 +863,9 @@ public class CafePos extends javax.swing.JFrame {
     } else {
         Enternumber = Enternumber + jbtn3.getText();
         jtxtDisplay.setText(Enternumber);
-    }
+    }if (jcbopayment.getSelectedItem().equals("Cash")) {
+    Change();
+}
     }//GEN-LAST:event_jbtn3ActionPerformed
 
     private void jbtn0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn0ActionPerformed
@@ -717,7 +876,9 @@ public class CafePos extends javax.swing.JFrame {
     } else {
         Enternumber = Enternumber + jbtn0.getText();
         jtxtDisplay.setText(Enternumber);
-    }
+    }if (jcbopayment.getSelectedItem().equals("Cash")) {
+    Change();
+}
     }//GEN-LAST:event_jbtn0ActionPerformed
 
     private void jbtnCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCActionPerformed
@@ -725,18 +886,6 @@ public class CafePos extends javax.swing.JFrame {
           jtxtDisplay.setText("");
             jtxtChange.setText("");
     }//GEN-LAST:event_jbtnCActionPerformed
-
-    private void jbtnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPayActionPerformed
-        // TODO add your handling code here:
-        if(jcbopayment.getSelectedItem().equals("Cash"))
-        {
-            Change();
-        }else{
-        jtxtChange.setText("");
-        jtxtDisplay.setText("");
-         }
-        
-    }//GEN-LAST:event_jbtnPayActionPerformed
 
     private void hotMatchalatteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hotMatchalatteActionPerformed
         // TODO add your handling code here:
@@ -768,11 +917,9 @@ public class CafePos extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnIceMatchaLatteActionPerformed
 
     private void hotlatteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hotlatteActionPerformed
-        // TODO add your handling code here:
-          double PriceOfItem = 2.5;
-        
-        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
-        model.addRow(new Object[]{"caramel coffee","1",PriceOfItem });
+         double PriceOfItem = 2.5;
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{"Hot Latte", "1", PriceOfItem});  // FIXED: was "caramel coffee"
         ItemCost();
     }//GEN-LAST:event_hotlatteActionPerformed
 
@@ -921,11 +1068,28 @@ public class CafePos extends javax.swing.JFrame {
         ItemCost();
     }//GEN-LAST:event_jbtnPuddingActionPerformed
 
-    private void jbtnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnResetActionPerformed
-        // TODO add your handling code here:
+    private void jbtnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRemoveActionPerformed
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int RemoveItem = jTable1.getSelectedRow();
         
-         
-        DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
+        if (RemoveItem >= 0) {  // FIXED: was > 0, should be >= 0 (row indices start at 0)
+            model.removeRow(RemoveItem);
+            ItemCost();
+            
+            if (jcbopayment.getSelectedItem().equals("Cash")) {
+                Change();
+            } else {
+                jtxtDisplay.setText("");
+                jtxtChange.setText("");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a row to remove!", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }//GEN-LAST:event_jbtnRemoveActionPerformed
+
+    private void jbtnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnResetActionPerformed
+         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
         jtxtChange.setText("");
         jtxtTax.setText("");
@@ -933,75 +1097,187 @@ public class CafePos extends javax.swing.JFrame {
         jtxtSubTotal.setText("");
         jtxtDisplay.setText("");
         jtxtBarCode.setText("");
-        
+
     }//GEN-LAST:event_jbtnResetActionPerformed
 
     private void jbtnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPrintActionPerformed
-        // TODO add your handling code here:
-        MessageFormat header = new MessageFormat("Printing in the progress");
-        MessageFormat footer = new MessageFormat("page {0,  number, integer}");
-        
-        try{
-            jTable1.print(JTable.PrintMode.NORMAL, header, footer);
+          try {
+        // Choose save location
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(new File("receipt.pdf"));
+        int choice = fileChooser.showSaveDialog(this);
+        if (choice != JFileChooser.APPROVE_OPTION) return;
+
+        String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+
+        // Create PDF
+        PDDocument doc = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.LETTER);
+        doc.addPage(page);
+
+        PDPageContentStream content = new PDPageContentStream(doc, page);
+
+        float y = 750;
+        float left = 50;
+
+        // Function to write text
+        java.util.function.BiConsumer<String, Float> write = (text, size) -> {
+    try {
+        content.setFont(font, size);          // use the font object
+        content.beginText();
+        content.newLineAtOffset(left, yPos[0]);
+        content.showText(text);
+        content.endText();
+        yPos[0] -= (size + 4);               // update y-position
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+};
+
+        // HEADER
+        write.accept("****************************************", 12f);
+        write.accept("              MY COFFEE SHOP            ", 12f);
+        write.accept("       123 Street, City, Country        ", 12f);
+        write.accept("            Tel: 555-123-456            ", 12f);
+        write.accept("----------------------------------------", 12f);
+
+        // TABLE HEADER
+        write.accept("Item                Qty       Price", 12f);
+        write.accept("----------------------------------------", 12f);
+
+        double total = 0;
+
+        // LOOP THROUGH JTable ROWS
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+
+            String item = jTable1.getValueAt(i, 0).toString();
+            String qty = jTable1.getValueAt(i, 1).toString();
+            String price = jTable1.getValueAt(i, 2).toString();
+
+            // Align columns manually
+            String line = String.format("%-20s %-5s %8s", item, qty, price);
+
+            write.accept(line, 12f);
+
+            total += Double.parseDouble(price);
         }
-        catch(java.awt.print.PrinterException e)
-        {
-            System.err.format("No Printer found", e.getMessage());
-        }
-        
+
+        write.accept("----------------------------------------", 12f);
+
+        // TOTAL
+        write.accept(String.format("TOTAL: %32.2f", total), 12f);
+        write.accept("----------------------------------------", 12f);
+
+        // TIMESTAMP
+        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        write.accept("Date/Time: " + now, 12f);
+
+        // FOOTER
+        write.accept("****************************************", 12f);
+        write.accept("      THANK YOU FOR YOUR PURCHASE!      ", 12f);
+        write.accept("****************************************", 12f);
+
+        content.close();
+        doc.save(filePath);
+        doc.close();
+
+        JOptionPane.showMessageDialog(this, "PDF Saved:\n" + filePath);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }
+
     }//GEN-LAST:event_jbtnPrintActionPerformed
 
-    private void jbtnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRemoveActionPerformed
-        // TODO add your handling code here:
-         DefaultTableModel model= (DefaultTableModel) jTable1.getModel();
-         
-         int RemoveItem = jTable1.getSelectedRow();
-         if(RemoveItem > 0 ){
-             model.removeRow(RemoveItem);
-         }
-         ItemCost();
-         
-         if(jcbopayment.getSelectedItem().equals("Cash"))
-         {
-             Change();
-         }else{
-              jtxtDisplay.setText("");
-            jtxtChange.setText("");
-         }
-         
-    }//GEN-LAST:event_jbtnRemoveActionPerformed
-
     private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed
-        // TODO add your handling code here:
-        frame = new JFrame("{Exit");
-        if(JOptionPane.showConfirmDialog(frame,"Confirm if you want to exit", "Point of sales",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION);
+        int response = JOptionPane.showConfirmDialog(
+            this,
+            "Confirm if you want to exit",
+            "Point of Sales",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (response == JOptionPane.YES_OPTION) {
+        System.exit(0);
+    }
     }//GEN-LAST:event_jbtnExitActionPerformed
+
+    private void jbtnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPayActionPerformed
+         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    
+    if (model.getRowCount() == 0) {
+        JOptionPane.showMessageDialog(this, "No items in cart!", 
+            "Warning", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    String paymentMethod = jcbopayment.getSelectedItem().toString();
+    double amountPaid = 0;
+    double changeAmount = 0;
+    
+    if (paymentMethod.equals("Cash")) {
+        if (jtxtDisplay.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter cash amount!", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        amountPaid = Double.parseDouble(jtxtDisplay.getText());
+        changeAmount = Double.parseDouble(jtxtChange.getText().replace("$ ", ""));
+    } else {
+        // For card payments
+        double total = Double.parseDouble(jtxtTotal.getText().replace("$ ", ""));
+        amountPaid = total;
+        changeAmount = 0;
+    }
+    
+    try {
+        int orderId = orderManager.saveOrder(model, paymentMethod, 
+                                            amountPaid, changeAmount);
+        JOptionPane.showMessageDialog(this, 
+            "Order completed successfully!\nOrder ID: " + orderId, 
+            "Success", JOptionPane.INFORMATION_MESSAGE);
+        
+        // Reset form
+        model.setRowCount(0);
+        jtxtSubTotal.setText("");
+        jtxtTax.setText("");
+        jtxtTotal.setText("");
+        jtxtDisplay.setText("");
+        jtxtChange.setText("");
+        jtxtBarCode.setText("");
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error saving order: " + e.getMessage(), 
+            "Database Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }  
+    }//GEN-LAST:event_jbtnPayActionPerformed
+
+    private void jcbopaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbopaymentActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcbopaymentActionPerformed
      
     private JFrame frame;
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new CafePos().setVisible(true));
-    }
+    
+
+    public static void main(String[] args) {
+
+         try {
+            FlatDarkLaf.setup();
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize FlatLaf.");
+        }
+
+        java.awt.EventQueue.invokeLater(() -> {
+            new CafePos().setVisible(true);
+        });
+}
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Jbtnicelemontea;
@@ -1016,12 +1292,12 @@ public class CafePos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton jbtn0;
@@ -1057,6 +1333,7 @@ public class CafePos extends javax.swing.JFrame {
     private javax.swing.JButton jbtncaramaldrink;
     private javax.swing.JButton jbtnjaozi;
     private javax.swing.JComboBox<String> jcbopayment;
+    private javax.swing.JLabel jlblDate;
     private javax.swing.JTextField jtxtBarCode;
     private javax.swing.JTextField jtxtChange;
     private javax.swing.JTextField jtxtDisplay;
