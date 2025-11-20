@@ -189,6 +189,7 @@ private int getItemId(String name, double price){
         jbtnExit = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jlblDate = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -653,9 +654,13 @@ private int getItemId(String name, double price){
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jlblDate.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jPanel8.add(jlblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1400, 20, 180, 30));
+        jPanel8.add(jlblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1380, 20, 180, 30));
 
-        getContentPane().add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 1590, 70));
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel4.setText("Amazon Forest Cafe");
+        jPanel8.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        getContentPane().add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 1580, 70));
 
         jPanel9.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -1288,6 +1293,7 @@ private int getItemId(String name, double price){
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
