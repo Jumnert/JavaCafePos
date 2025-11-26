@@ -78,9 +78,10 @@ final float[] yPos = {750f};
 }
     
 public class DBConnection {
-     private static final String URL = "jdbc:mysql://localhost:3306/cafepos?useSSL=false&serverTimezone=UTC";
+     private static final String URL = "jdbc:mysql://localhost:3306/cafepos?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+
     private static final String USER = "root";
-    private static final String PASS = "nith2020";
+    private static final String PASS = "mony123";
 
     public static Connection getConnection() throws SQLException {
         try {
@@ -751,9 +752,11 @@ private int getItemId(String name, double price){
     } else {
         Enternumber = Enternumber + jbtn2.getText();
         jtxtDisplay.setText(Enternumber);
-    }
+    }if (jcbopayment.getSelectedItem().equals("Cash")) {
+    Change();
     }//GEN-LAST:event_jbtn2ActionPerformed
-
+    }
+    
     private void jbtnDotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDotActionPerformed
         // TODO add your handling code here:
         String Enternumber = jtxtDisplay.getText();

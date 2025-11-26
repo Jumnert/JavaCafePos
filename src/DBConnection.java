@@ -14,9 +14,9 @@ import java.sql.*;
  * Place this in a separate file: DBConnection.java
  */
 public class DBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/cafepos?useSSL=false&serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://localhost:3306/cafepos?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String USER = "root";
-    private static final String PASS = "nith2020";
+    private static final String PASS = "mony123";
 
     /**
      * Get database connection

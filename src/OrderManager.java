@@ -21,6 +21,12 @@ public class OrderManager {
     
     /**
      * Save complete order with all items
+     * @param model
+     * @param paymentMethod
+     * @param amountPaid
+     * @param changeAmount
+     * @return 
+     * @throws java.sql.SQLException 
      */
     public int saveOrder(DefaultTableModel model, String paymentMethod, 
                          double amountPaid, double changeAmount) throws SQLException {
