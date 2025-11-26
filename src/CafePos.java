@@ -183,8 +183,8 @@ private int getItemId(String name, double price){
         jtxtBarCode = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jbtnPay = new javax.swing.JButton();
-        jbtnReset = new javax.swing.JButton();
         jbtnRemove = new javax.swing.JButton();
+        jbtnReset = new javax.swing.JButton();
         jbtnPrint = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jbtnExit = new javax.swing.JButton();
@@ -201,7 +201,7 @@ private int getItemId(String name, double price){
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
-        setBackground(new java.awt.Color(204, 204, 204));
+        setBackground(new java.awt.Color(0, 255, 204));
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -581,7 +581,7 @@ private int getItemId(String name, double price){
         jPanel6.setPreferredSize(new java.awt.Dimension(170, 104));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jbtnPay.setBackground(new java.awt.Color(0, 153, 255));
+        jbtnPay.setBackground(new java.awt.Color(4, 98, 66));
         jbtnPay.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jbtnPay.setForeground(new java.awt.Color(255, 255, 255));
         jbtnPay.setText("PAY");
@@ -590,20 +590,7 @@ private int getItemId(String name, double price){
                 jbtnPayActionPerformed(evt);
             }
         });
-        jPanel6.add(jbtnPay, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 370, 70));
-
-        jbtnReset.setBackground(new java.awt.Color(255, 153, 153));
-        jbtnReset.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jbtnReset.setForeground(new java.awt.Color(255, 255, 255));
-        jbtnReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/reset.png"))); // NOI18N
-        jbtnReset.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jbtnReset.setMaximumSize(new java.awt.Dimension(129, 35));
-        jbtnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnResetActionPerformed(evt);
-            }
-        });
-        jPanel6.add(jbtnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, 80, 70));
+        jPanel6.add(jbtnPay, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 170, 150));
 
         jbtnRemove.setBackground(new java.awt.Color(255, 51, 51));
         jbtnRemove.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -617,7 +604,20 @@ private int getItemId(String name, double price){
                 jbtnRemoveActionPerformed(evt);
             }
         });
-        jPanel6.add(jbtnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 190, 70));
+        jPanel6.add(jbtnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 10, 190, 70));
+
+        jbtnReset.setBackground(new java.awt.Color(255, 153, 153));
+        jbtnReset.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jbtnReset.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/reset.png"))); // NOI18N
+        jbtnReset.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jbtnReset.setMaximumSize(new java.awt.Dimension(129, 35));
+        jbtnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnResetActionPerformed(evt);
+            }
+        });
+        jPanel6.add(jbtnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 90, 80, 70));
 
         jbtnPrint.setBackground(new java.awt.Color(51, 204, 255));
         jbtnPrint.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -630,7 +630,7 @@ private int getItemId(String name, double price){
                 jbtnPrintActionPerformed(evt);
             }
         });
-        jPanel6.add(jbtnPrint, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 80, 70));
+        jPanel6.add(jbtnPrint, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, 100, 70));
 
         getContentPane().add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1210, 800, 400, 180));
 
@@ -654,10 +654,10 @@ private int getItemId(String name, double price){
         jPanel8.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jlblDate.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jlblDate.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jPanel8.add(jlblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1380, 20, 180, 30));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel4.setText("Amazon Forest Cafe");
         jPanel8.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
@@ -682,7 +682,8 @@ private int getItemId(String name, double price){
         jPanel9.add(jtxtDisplay, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 60, 110, -1));
 
         jcbopayment.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jcbopayment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Visa Card", "Master Card", " " }));
+        jcbopayment.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Visa Card", "Master Card", "QR Code" }));
+        jcbopayment.setToolTipText("");
         jcbopayment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbopaymentActionPerformed(evt);
@@ -1222,7 +1223,9 @@ private int getItemId(String name, double price){
     String paymentMethod = jcbopayment.getSelectedItem().toString();
     double amountPaid = 0;
     double changeAmount = 0;
+    double total = Double.parseDouble(jtxtTotal.getText().replace("$ ", ""));
     
+    // Handle different payment methods
     if (paymentMethod.equals("Cash")) {
         if (jtxtDisplay.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter cash amount!", 
@@ -1230,10 +1233,49 @@ private int getItemId(String name, double price){
             return;
         }
         amountPaid = Double.parseDouble(jtxtDisplay.getText());
-        changeAmount = Double.parseDouble(jtxtChange.getText().replace("$ ", ""));
+        String changeText = jtxtChange.getText().replace("$ ", "");
+        changeAmount = changeText.isEmpty() ? 0 : Double.parseDouble(changeText);
+        
+        if (changeAmount < 0) {
+            JOptionPane.showMessageDialog(this, "Insufficient cash amount!", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+    } else if (paymentMethod.equals("QR Code")) {
+        // Show Bank Selection Dialog FIRST
+        BankSelectionDialog bankDialog = new BankSelectionDialog(this);
+        bankDialog.setVisible(true);
+        
+        String selectedBank = bankDialog.getSelectedBank();
+        if (selectedBank == null) {
+            // User cancelled bank selection
+            return;
+        }
+        
+        // Show QR Payment Dialog with selected bank
+        QRPaymentDialog qrDialog = new QRPaymentDialog(this, total, selectedBank);
+        qrDialog.setVisible(true);
+        
+        if (!qrDialog.isPaymentConfirmed()) {
+            // User cancelled payment
+            return;
+        }
+        
+        amountPaid = total;
+        changeAmount = 0;
+        
     } else {
-        // For card payments
-        double total = Double.parseDouble(jtxtTotal.getText().replace("$ ", ""));
+        // For card payments (Visa, Master Card)
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            String.format("Process %s payment of $ %.2f?", paymentMethod, total),
+            "Confirm Payment", 
+            JOptionPane.YES_NO_OPTION);
+        
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
         amountPaid = total;
         changeAmount = 0;
     }
@@ -1261,7 +1303,7 @@ private int getItemId(String name, double price){
         e.printStackTrace();
     }  
     }//GEN-LAST:event_jbtnPayActionPerformed
-
+    
     private void jcbopaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbopaymentActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jcbopaymentActionPerformed
@@ -1276,7 +1318,7 @@ private int getItemId(String name, double price){
     public static void main(String[] args) {
 
          try {
-            FlatDarkLaf.setup();
+            FlatLightLaf.setup();
         } catch (Exception ex) {
             System.err.println("Failed to initialize FlatLaf.");
         }
