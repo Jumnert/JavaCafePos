@@ -4,7 +4,6 @@ import java.sql.*;
  * Database connection utility class
  */
 public class DBConnection {
-
     private static final String URL = "jdbc:mysql://localhost:3306/cafepos?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String USER = "root";
     private static final String[] PASSES = {"mony123", "nith2020"}; // two passwords to try
