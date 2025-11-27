@@ -186,11 +186,9 @@ private int getItemId(String name, double price){
         jbtnRemove = new javax.swing.JButton();
         jbtnReset = new javax.swing.JButton();
         jbtnPrint = new javax.swing.JButton();
-        jPanel7 = new javax.swing.JPanel();
-        jbtnExit = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
-        jlblDate = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jlblDate = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -198,6 +196,8 @@ private int getItemId(String name, double price){
         jtxtDisplay = new javax.swing.JTextField();
         jcbopayment = new javax.swing.JComboBox<>();
         jtxtChange = new javax.swing.JTextField();
+        jbtnDashboard = new javax.swing.JButton();
+        jbtnExit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -407,7 +407,7 @@ private int getItemId(String name, double price){
         });
         jPanel1.add(jbtnChocolateCake, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 570, 130, 130));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 90, 570, 710));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 120, 570, 710));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -553,7 +553,7 @@ private int getItemId(String name, double price){
         jLabel1.setText("Total");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, -1, -1));
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 90, 300, 520));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 300, 530));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -565,18 +565,18 @@ private int getItemId(String name, double price){
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1220, 90, 370, 650));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 120, 370, 490));
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 700, -1, -1));
 
-        jtxtBarCode.setFont(new java.awt.Font("IDAutomationHC39M Free Version", 0, 14)); // NOI18N
+        jtxtBarCode.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
         jtxtBarCode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtxtBarCodeActionPerformed(evt);
             }
         });
-        getContentPane().add(jtxtBarCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(1220, 740, 370, 60));
+        getContentPane().add(jtxtBarCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 610, 370, 60));
 
         jPanel6.setPreferredSize(new java.awt.Dimension(170, 104));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -632,36 +632,19 @@ private int getItemId(String name, double price){
         });
         jPanel6.add(jbtnPrint, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, 100, 70));
 
-        getContentPane().add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1210, 800, 400, 180));
-
-        jPanel7.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jbtnExit.setBackground(new java.awt.Color(255, 51, 0));
-        jbtnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jbtnExit.setForeground(new java.awt.Color(255, 255, 255));
-        jbtnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/logout.png"))); // NOI18N
-        jbtnExit.setText("EXIT");
-        jbtnExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnExitActionPerformed(evt);
-            }
-        });
-        jPanel7.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 830, 290, 60));
-
-        getContentPane().add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 310, 900));
+        getContentPane().add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 670, 400, 180));
 
         jPanel8.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jlblDate.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jPanel8.add(jlblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1380, 20, 180, 30));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel4.setText("Amazon Forest Cafe");
         jPanel8.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
-        getContentPane().add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 1580, 70));
+        jlblDate.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jPanel8.add(jlblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 20, 180, 30));
+
+        getContentPane().add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 1180, 70));
 
         jPanel9.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -694,7 +677,27 @@ private int getItemId(String name, double price){
         jtxtChange.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jPanel9.add(jtxtChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 110, 110, -1));
 
-        getContentPane().add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 620, 300, 180));
+        getContentPane().add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 650, 300, 180));
+
+        jbtnDashboard.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jbtnDashboard.setText("Dashboard");
+        jbtnDashboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnDashboardActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jbtnDashboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 140, 30));
+
+        jbtnExit.setBackground(new java.awt.Color(255, 51, 0));
+        jbtnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jbtnExit.setForeground(new java.awt.Color(255, 255, 255));
+        jbtnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/logout.png"))); // NOI18N
+        jbtnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnExitActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 40, 70, 70));
 
         pack();
         setLocationRelativeTo(null);
@@ -1523,6 +1526,14 @@ private int getItemId(String name, double price){
     private void jcbopaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbopaymentActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jcbopaymentActionPerformed
+
+    private void jbtnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDashboardActionPerformed
+                                          
+    DashboardPanel dashboard = new DashboardPanel();
+    dashboard.setVisible(true);
+  
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbtnDashboardActionPerformed
      
     private JFrame frame;
     /**
@@ -1562,7 +1573,6 @@ private int getItemId(String name, double price){
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
@@ -1579,6 +1589,7 @@ private int getItemId(String name, double price){
     private javax.swing.JButton jbtn9;
     private javax.swing.JButton jbtnC;
     private javax.swing.JButton jbtnChocolateCake;
+    private javax.swing.JButton jbtnDashboard;
     private javax.swing.JButton jbtnDot;
     private javax.swing.JButton jbtnExit;
     private javax.swing.JButton jbtnFriesChicken;
