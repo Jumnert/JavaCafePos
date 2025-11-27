@@ -81,7 +81,7 @@ public class DBConnection {
      private static final String URL = "jdbc:mysql://localhost:3306/cafepos?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
 
     private static final String USER = "root";
-    private static final String PASS = "mony123";
+    private static final String PASS = "nith2020";
 
     public static Connection getConnection() throws SQLException {
         try {
@@ -570,7 +570,7 @@ private int getItemId(String name, double price){
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 700, -1, -1));
 
-        jtxtBarCode.setFont(new java.awt.Font("barcode font", 0, 52)); // NOI18N
+        jtxtBarCode.setFont(new java.awt.Font("IDAutomationHC39M Free Version", 0, 14)); // NOI18N
         jtxtBarCode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtxtBarCodeActionPerformed(evt);
@@ -606,7 +606,7 @@ private int getItemId(String name, double price){
         });
         jPanel6.add(jbtnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 10, 190, 70));
 
-        jbtnReset.setBackground(new java.awt.Color(255, 153, 153));
+        jbtnReset.setBackground(javax.swing.UIManager.getDefaults().getColor("InternalFrame.closePressedBackground"));
         jbtnReset.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jbtnReset.setForeground(new java.awt.Color(255, 255, 255));
         jbtnReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/reset.png"))); // NOI18N
@@ -619,7 +619,7 @@ private int getItemId(String name, double price){
         });
         jPanel6.add(jbtnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 90, 80, 70));
 
-        jbtnPrint.setBackground(new java.awt.Color(51, 204, 255));
+        jbtnPrint.setBackground(javax.swing.UIManager.getDefaults().getColor("Actions.Blue"));
         jbtnPrint.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jbtnPrint.setForeground(new java.awt.Color(255, 255, 255));
         jbtnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/printer (1).png"))); // NOI18N
@@ -1110,90 +1110,293 @@ private int getItemId(String name, double price){
     }//GEN-LAST:event_jbtnResetActionPerformed
 
     private void jbtnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPrintActionPerformed
-          try {
+           try {
         // Choose save location
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setSelectedFile(new File("receipt.pdf"));
+        fileChooser.setDialogTitle("Save Receipt");
+        fileChooser.setSelectedFile(new File("Receipt_" + System.currentTimeMillis() + ".pdf"));
+        
         int choice = fileChooser.showSaveDialog(this);
         if (choice != JFileChooser.APPROVE_OPTION) return;
 
         String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+        if (!filePath.toLowerCase().endsWith(".pdf")) {
+            filePath += ".pdf";
+        }
 
         // Create PDF
         PDDocument doc = new PDDocument();
-        PDPage page = new PDPage(PDRectangle.LETTER);
+        PDPage page = new PDPage(new PDRectangle(226, 600)); // Thermal receipt size (80mm width)
         doc.addPage(page);
 
         PDPageContentStream content = new PDPageContentStream(doc, page);
+        PDType1Font fontBold = PDType1Font.HELVETICA_BOLD;
+        PDType1Font fontRegular = PDType1Font.HELVETICA;
 
-        float y = 750;
-        float left = 50;
+        float margin = 20;
+        float[] yPos = {570}; // Use array to make it effectively final
+        float pageWidth = page.getMediaBox().getWidth();
 
-        // Function to write text
-        java.util.function.BiConsumer<String, Float> write = (text, size) -> {
-    try {
-        content.setFont(font, size);          // use the font object
+        // ===== HEADER =====
+        yPos[0] -= 10;
+        
+        // Cafe Name
+        content.setFont(fontBold, 12);
+        String title = "AMAZON FOREST CAFE";
+        float titleWidth = fontBold.getStringWidth(title) / 1000 * 12;
         content.beginText();
-        content.newLineAtOffset(left, yPos[0]);
-        content.showText(text);
+        content.newLineAtOffset((pageWidth - titleWidth) / 2, yPos[0]);
+        content.showText(title);
         content.endText();
-        yPos[0] -= (size + 4);               // update y-position
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-};
+        yPos[0] -= 14;
+        
+        // Address
+        content.setFont(fontRegular, 8);
+        String addr1 = "123 Main Street";
+        float addr1Width = fontRegular.getStringWidth(addr1) / 1000 * 8;
+        content.beginText();
+        content.newLineAtOffset((pageWidth - addr1Width) / 2, yPos[0]);
+        content.showText(addr1);
+        content.endText();
+        yPos[0] -= 10;
+        
+        String addr2 = "Phnom Penh, Cambodia";
+        float addr2Width = fontRegular.getStringWidth(addr2) / 1000 * 8;
+        content.beginText();
+        content.newLineAtOffset((pageWidth - addr2Width) / 2, yPos[0]);
+        content.showText(addr2);
+        content.endText();
+        yPos[0] -= 10;
+        
+        String phone = "Tel: +855 12 345 678";
+        float phoneWidth = fontRegular.getStringWidth(phone) / 1000 * 8;
+        content.beginText();
+        content.newLineAtOffset((pageWidth - phoneWidth) / 2, yPos[0]);
+        content.showText(phone);
+        content.endText();
+        yPos[0] -= 15;
+        
+        // Line
+        content.moveTo(margin, yPos[0]);
+        content.lineTo(pageWidth - margin, yPos[0]);
+        content.stroke();
+        yPos[0] -= 10;
 
-        // HEADER
-        write.accept("****************************************", 12f);
-        write.accept("              MY COFFEE SHOP            ", 12f);
-        write.accept("       123 Street, City, Country        ", 12f);
-        write.accept("            Tel: 555-123-456            ", 12f);
-        write.accept("----------------------------------------", 12f);
+        // ===== DATE & TIME =====
+        String dateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
+        content.setFont(fontRegular, 8);
+        content.beginText();
+        content.newLineAtOffset(margin, yPos[0]);
+        content.showText("Date: " + dateTime);
+        content.endText();
+        yPos[0] -= 12;
 
-        // TABLE HEADER
-        write.accept("Item                Qty       Price", 12f);
-        write.accept("----------------------------------------", 12f);
+        // Receipt Number
+        String receiptNo = "RCP" + System.currentTimeMillis();
+        content.beginText();
+        content.newLineAtOffset(margin, yPos[0]);
+        content.showText("Receipt: " + receiptNo);
+        content.endText();
+        yPos[0] -= 15;
 
-        double total = 0;
+        // Line
+        content.moveTo(margin, yPos[0]);
+        content.lineTo(pageWidth - margin, yPos[0]);
+        content.stroke();
+        yPos[0] -= 10;
 
-        // LOOP THROUGH JTable ROWS
+        // ===== TABLE HEADER =====
+        content.setFont(fontBold, 9);
+        content.beginText();
+        content.newLineAtOffset(margin, yPos[0]);
+        content.showText("Item");
+        content.endText();
+
+        content.beginText();
+        content.newLineAtOffset(130, yPos[0]);
+        content.showText("Qty");
+        content.endText();
+
+        content.beginText();
+        content.newLineAtOffset(165, yPos[0]);
+        content.showText("Price");
+        content.endText();
+        yPos[0] -= 12;
+
+        // Line
+        content.moveTo(margin, yPos[0]);
+        content.lineTo(pageWidth - margin, yPos[0]);
+        content.stroke();
+        yPos[0] -= 8;
+
+        // ===== ITEMS =====
+        content.setFont(fontRegular, 8);
+        double subtotal = 0;
+
         for (int i = 0; i < jTable1.getRowCount(); i++) {
-
             String item = jTable1.getValueAt(i, 0).toString();
             String qty = jTable1.getValueAt(i, 1).toString();
             String price = jTable1.getValueAt(i, 2).toString();
 
-            // Align columns manually
-            String line = String.format("%-20s %-5s %8s", item, qty, price);
+            // Truncate long item names
+            if (item.length() > 20) {
+                item = item.substring(0, 17) + "...";
+            }
 
-            write.accept(line, 12f);
+            // Item name
+            content.beginText();
+            content.newLineAtOffset(margin, yPos[0]);
+            content.showText(item);
+            content.endText();
 
-            total += Double.parseDouble(price);
+            // Quantity
+            content.beginText();
+            content.newLineAtOffset(135, yPos[0]);
+            content.showText(qty);
+            content.endText();
+
+            // Price
+            content.beginText();
+            content.newLineAtOffset(160, yPos[0]);
+            content.showText("$" + price);
+            content.endText();
+
+            yPos[0] -= 12;
+            subtotal += Double.parseDouble(price);
         }
 
-        write.accept("----------------------------------------", 12f);
+        yPos[0] -= 3;
+        
+        // Line
+        content.moveTo(margin, yPos[0]);
+        content.lineTo(pageWidth - margin, yPos[0]);
+        content.stroke();
+        yPos[0] -= 10;
 
-        // TOTAL
-        write.accept(String.format("TOTAL: %32.2f", total), 12f);
-        write.accept("----------------------------------------", 12f);
+        // ===== TOTALS =====
+        double tax = subtotal * 0.039;
+        double total = subtotal + tax;
 
-        // TIMESTAMP
-        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        write.accept("Date/Time: " + now, 12f);
+        // Subtotal
+        content.setFont(fontRegular, 9);
+        content.beginText();
+        content.newLineAtOffset(margin, yPos[0]);
+        content.showText("Subtotal:");
+        content.endText();
+        content.beginText();
+        content.newLineAtOffset(150, yPos[0]);
+        content.showText(String.format("$ %.2f", subtotal));
+        content.endText();
+        yPos[0] -= 12;
 
-        // FOOTER
-        write.accept("****************************************", 12f);
-        write.accept("      THANK YOU FOR YOUR PURCHASE!      ", 12f);
-        write.accept("****************************************", 12f);
+        // Tax
+        content.beginText();
+        content.newLineAtOffset(margin, yPos[0]);
+        content.showText("Tax (3.9%):");
+        content.endText();
+        content.beginText();
+        content.newLineAtOffset(150, yPos[0]);
+        content.showText(String.format("$ %.2f", tax));
+        content.endText();
+        yPos[0] -= 15;
+
+        // Total
+        content.setFont(fontBold, 11);
+        content.beginText();
+        content.newLineAtOffset(margin, yPos[0]);
+        content.showText("TOTAL:");
+        content.endText();
+        content.beginText();
+        content.newLineAtOffset(145, yPos[0]);
+        content.showText(String.format("$ %.2f", total));
+        content.endText();
+        yPos[0] -= 15;
+
+        // Line
+        content.moveTo(margin, yPos[0]);
+        content.lineTo(pageWidth - margin, yPos[0]);
+        content.stroke();
+        yPos[0] -= 10;
+
+        // ===== PAYMENT INFO =====
+        String paymentMethod = jcbopayment.getSelectedItem().toString();
+        content.setFont(fontRegular, 8);
+        content.beginText();
+        content.newLineAtOffset(margin, yPos[0]);
+        content.showText("Payment: " + paymentMethod);
+        content.endText();
+        yPos[0] -= 12;
+
+        if (paymentMethod.equals("Cash")) {
+            String cashPaid = jtxtDisplay.getText();
+            String change = jtxtChange.getText();
+            
+            if (!cashPaid.isEmpty()) {
+                content.beginText();
+                content.newLineAtOffset(margin, yPos[0]);
+                content.showText("Cash: " + cashPaid);
+                content.endText();
+                yPos[0] -= 12;
+            }
+            
+            if (!change.isEmpty()) {
+                content.beginText();
+                content.newLineAtOffset(margin, yPos[0]);
+                content.showText("Change: " + change);
+                content.endText();
+                yPos[0] -= 12;
+            }
+        }
+
+        yPos[0] -= 5;
+        
+        // Line
+        content.moveTo(margin, yPos[0]);
+        content.lineTo(pageWidth - margin, yPos[0]);
+        content.stroke();
+        yPos[0] -= 15;
+
+        // ===== FOOTER =====
+        content.setFont(fontBold, 9);
+        String thanks = "Thank You for Your Visit!";
+        float thanksWidth = fontBold.getStringWidth(thanks) / 1000 * 9;
+        content.beginText();
+        content.newLineAtOffset((pageWidth - thanksWidth) / 2, yPos[0]);
+        content.showText(thanks);
+        content.endText();
+        yPos[0] -= 12;
+        
+        content.setFont(fontRegular, 8);
+        String comeAgain = "Please Come Again";
+        float comeAgainWidth = fontRegular.getStringWidth(comeAgain) / 1000 * 8;
+        content.beginText();
+        content.newLineAtOffset((pageWidth - comeAgainWidth) / 2, yPos[0]);
+        content.showText(comeAgain);
+        content.endText();
+        yPos[0] -= 12;
+        
+        String website = "www.amazonforestcafe.com";
+        float websiteWidth = fontRegular.getStringWidth(website) / 1000 * 8;
+        content.beginText();
+        content.newLineAtOffset((pageWidth - websiteWidth) / 2, yPos[0]);
+        content.showText(website);
+        content.endText();
 
         content.close();
         doc.save(filePath);
         doc.close();
 
-        JOptionPane.showMessageDialog(this, "PDF Saved:\n" + filePath);
+        JOptionPane.showMessageDialog(this, 
+            "Receipt saved successfully!\n" + filePath,
+            "Success",
+            JOptionPane.INFORMATION_MESSAGE);
 
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, 
+            "Error creating receipt: " + e.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     }
 
     }//GEN-LAST:event_jbtnPrintActionPerformed
@@ -1212,7 +1415,7 @@ private int getItemId(String name, double price){
     }//GEN-LAST:event_jbtnExitActionPerformed
 
     private void jbtnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPayActionPerformed
-         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+          DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     
     if (model.getRowCount() == 0) {
         JOptionPane.showMessageDialog(this, "No items in cart!", 
@@ -1265,8 +1468,21 @@ private int getItemId(String name, double price){
         amountPaid = total;
         changeAmount = 0;
         
+    } else if (paymentMethod.equals("Visa Card") || paymentMethod.equals("Master Card")) {
+        // Show Card Payment Dialog
+        CardPaymentDialog cardDialog = new CardPaymentDialog(this, total, paymentMethod);
+        cardDialog.setVisible(true);
+        
+        if (!cardDialog.isPaymentConfirmed()) {
+            // User cancelled payment
+            return;
+        }
+        
+        amountPaid = total;
+        changeAmount = 0;
+        
     } else {
-        // For card payments (Visa, Master Card)
+        // Fallback for any other payment methods
         int confirm = JOptionPane.showConfirmDialog(this, 
             String.format("Process %s payment of $ %.2f?", paymentMethod, total),
             "Confirm Payment", 
@@ -1317,15 +1533,15 @@ private int getItemId(String name, double price){
 
     public static void main(String[] args) {
 
-         try {
-            FlatLightLaf.setup();
-        } catch (Exception ex) {
-            System.err.println("Failed to initialize FlatLaf.");
-        }
+           try {
+        FlatLightLaf.setup();
+    } catch (Exception ex) {
+        System.err.println("Failed to initialize FlatLaf.");
+    }
 
-        java.awt.EventQueue.invokeLater(() -> {
-            new CafePos().setVisible(true);
-        });
+    java.awt.EventQueue.invokeLater(() -> {
+        new LoginScreen().setVisible(true);
+    });
 }
 
 
