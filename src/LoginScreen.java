@@ -38,10 +38,10 @@ public class LoginScreen extends JFrame {
     
     // Add your image paths here (place images in a "promos" folder)
     private String[] imagePaths = {
-        "promos/promo1.jpg",
-        "promos/promo2.jpg",
-        "promos/promo3.jpg",
-        "promos/promo4.jpg"
+         "Image" + File.separator + "p1.jpg",
+    "Image" + File.separator + "p2.jpg",
+    "Image" + File.separator + "p3.jpg",
+    "Image" + File.separator + "p4.jpg"
     };
     
     private BufferedImage[] promoImages;
@@ -53,21 +53,53 @@ public class LoginScreen extends JFrame {
     }
 
     private void loadImages() {
-        promoImages = new BufferedImage[imagePaths.length];
-        for (int i = 0; i < imagePaths.length; i++) {
-            try {
-                File imgFile = new File(imagePaths[i]);
-                if (imgFile.exists()) {
-                    promoImages[i] = ImageIO.read(imgFile);
-                } else {
-                    // Create a default gradient image if file not found
+       promoImages = new BufferedImage[imagePaths.length];
+    
+    for (int i = 0; i < imagePaths.length; i++) {
+        try {
+            // Try multiple path variations
+            File imgFile = new File(imagePaths[i]);
+            
+            // Debug: Print the absolute path being checked
+            System.out.println("Attempting to load: " + imgFile.getAbsolutePath());
+            System.out.println("File exists: " + imgFile.exists());
+            
+            if (imgFile.exists()) {
+                promoImages[i] = ImageIO.read(imgFile);
+                System.out.println("✓ Successfully loaded: " + imagePaths[i]);
+            } else {
+                // Try alternative paths
+                String[] alternativePaths = {
+                    imagePaths[i],
+                    "src/" + imagePaths[i],
+                    "../" + imagePaths[i],
+                    System.getProperty("user.dir") + File.separator + imagePaths[i]
+                };
+                
+                boolean loaded = false;
+                for (String altPath : alternativePaths) {
+                    File altFile = new File(altPath);
+                    if (altFile.exists()) {
+                        promoImages[i] = ImageIO.read(altFile);
+                        System.out.println("✓ Successfully loaded from alternative path: " + altPath);
+                        loaded = true;
+                        break;
+                    }
+                }
+                
+                if (!loaded) {
+                    System.err.println("✗ Image not found: " + imagePaths[i]);
+                    System.err.println("  Current directory: " + System.getProperty("user.dir"));
                     promoImages[i] = createDefaultImage(i);
                 }
-            } catch (Exception e) {
-                System.err.println("Error loading image: " + imagePaths[i]);
-                promoImages[i] = createDefaultImage(i);
             }
+        } catch (Exception e) {
+            System.err.println("✗ Error loading image: " + imagePaths[i]);
+            System.err.println("  Error: " + e.getMessage());
+            e.printStackTrace();
+            promoImages[i] = createDefaultImage(i);
         }
+    }
     }
 
     private BufferedImage createDefaultImage(int index) {

@@ -200,7 +200,6 @@ private int getItemId(String name, double price){
         jbtnExit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setAlwaysOnTop(true);
         setBackground(new java.awt.Color(0, 255, 204));
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -686,7 +685,7 @@ private int getItemId(String name, double price){
                 jbtnDashboardActionPerformed(evt);
             }
         });
-        getContentPane().add(jbtnDashboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 140, 30));
+        getContentPane().add(jbtnDashboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 140, 30));
 
         jbtnExit.setBackground(new java.awt.Color(255, 51, 0));
         jbtnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
