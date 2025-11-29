@@ -637,7 +637,7 @@ private int getItemId(String name, double price){
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel4.setText("Amazon Forest Cafe");
+        jLabel4.setText("Forest Cafe");
         jPanel8.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         jlblDate.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
