@@ -51,7 +51,7 @@ final float[] yPos = {750f};
     private ItemManager itemManager = new ItemManager();
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CafePos.class.getName());
-
+    //logger
     /**
      * Creates new form CafePos
      */
