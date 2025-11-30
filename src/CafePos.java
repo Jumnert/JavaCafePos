@@ -16,26 +16,16 @@ import java.awt.print.PrinterException;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import java.text.MessageFormat;
-import javax.swing.JTable;
-import javax.swing.JOptionPane;
-import javax.swing.JFileChooser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-
 import javax.swing.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.function.BiConsumer;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
