@@ -133,7 +133,7 @@ public class LoginScreen extends JFrame {
     }
 
     private void initComponents() {
-        setTitle("Amazon Forest Cafe - Login");
+        setTitle("Forest Cafe - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 700);
         setLocationRelativeTo(null);

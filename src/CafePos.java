@@ -68,11 +68,9 @@ final float[] yPos = {750f};
 }
     
 public class DBConnection {
-     private static final String URL = "jdbc:mysql://localhost:3306/cafepos?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-
+    private static final String URL = "jdbc:mysql://localhost:3306/cafepos?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String USER = "root";
     private static final String PASS = "nith2020";
-
     public static Connection getConnection() throws SQLException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -186,8 +184,8 @@ private int getItemId(String name, double price){
         jtxtDisplay = new javax.swing.JTextField();
         jcbopayment = new javax.swing.JComboBox<>();
         jtxtChange = new javax.swing.JTextField();
-        jbtnDashboard = new javax.swing.JButton();
         jbtnExit = new javax.swing.JButton();
+        jbtnDashboard = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 255, 204));
@@ -668,15 +666,6 @@ private int getItemId(String name, double price){
 
         getContentPane().add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 650, 300, 180));
 
-        jbtnDashboard.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jbtnDashboard.setText("Dashboard");
-        jbtnDashboard.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnDashboardActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jbtnDashboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 140, 30));
-
         jbtnExit.setBackground(new java.awt.Color(255, 51, 0));
         jbtnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jbtnExit.setForeground(new java.awt.Color(255, 255, 255));
@@ -687,6 +676,15 @@ private int getItemId(String name, double price){
             }
         });
         getContentPane().add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 40, 70, 70));
+
+        jbtnDashboard.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jbtnDashboard.setText("Dashboard");
+        jbtnDashboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnDashboardActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jbtnDashboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 140, 40));
 
         pack();
         setLocationRelativeTo(null);
@@ -707,8 +705,6 @@ private int getItemId(String name, double price){
         jtxtBarCode.setText(String.format("Total is $ %.2f", cTotal));
         
     }
-    
-    
     //function change////
     public void Change(){
         try {
