@@ -1,4 +1,0 @@
-ManagerAuthDialog$1
-ManagerAuthDialog
-ManagerAuthDialog$2
-LoginScreen
