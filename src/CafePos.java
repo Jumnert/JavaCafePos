@@ -70,7 +70,7 @@ final float[] yPos = {750f};
 public class DBConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/cafepos?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String USER = "root";
-    private static final String PASS = "nith2020";
+    private static final String PASS = "mony123";
     public static Connection getConnection() throws SQLException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -1405,6 +1405,7 @@ private int getItemId(String name, double price){
     private void jbtnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPayActionPerformed
           DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     
+          
     if (model.getRowCount() == 0) {
         JOptionPane.showMessageDialog(this, "No items in cart!", 
             "Warning", JOptionPane.WARNING_MESSAGE);
@@ -1427,6 +1428,12 @@ private int getItemId(String name, double price){
         String changeText = jtxtChange.getText().replace("$ ", "");
         changeAmount = changeText.isEmpty() ? 0 : Double.parseDouble(changeText);
         
+         amountPaid = Double.parseDouble(jtxtDisplay.getText());
+          
+          if (amountPaid < total) {
+        JOptionPane.showMessageDialog(this, "Insufficient cash!");
+        return;
+         }
         if (changeAmount < 0) {
             JOptionPane.showMessageDialog(this, "Insufficient cash amount!", 
                 "Error", JOptionPane.ERROR_MESSAGE);
