@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Jumnert/Desktop/JavaCafePos/src/CafePos.java</file>
-            <file>file:/C:/Users/Jumnert/Desktop/JavaCafePos/src/BankSelectionDialog.java</file>
-            <file>file:/C:/Users/Jumnert/Desktop/JavaCafePos/src/DBConnection.java</file>
-            <file>file:/C:/Users/Jumnert/Desktop/JavaCafePos/src/LoginScreen.java</file>
-            <file>file:/C:/Users/Jumnert/Desktop/JavaCafePos/src/ItemManager.java</file>
-            <file>file:/C:/Users/Jumnert/Desktop/JavaCafePos/src/DashboardPanel.java</file>
+            <file>file:/D:/JavaCafePos/src/CafePos.java</file>
+            <file>file:/D:/JavaCafePos/src/DBConnection.java</file>
+            <file>file:/D:/JavaCafePos/src/ReportsPanel.java</file>
         </group>
     </open-files>
 </project-private>
