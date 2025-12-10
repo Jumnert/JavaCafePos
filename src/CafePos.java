@@ -70,7 +70,7 @@ final float[] yPos = {750f};
 public class DBConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/cafepos?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String USER = "root";
-    private static final String PASS = "mony123";
+    private static final String PASS = "nith2020";
     public static Connection getConnection() throws SQLException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -101,7 +101,7 @@ private int getItemId(String name, double price){
         if(rs.next()) {
             id = rs.getInt("item_id");
         } else {
-            // Item does not exist, optionally insert it
+          
             PreparedStatement insert = conn.prepareStatement(
                 "INSERT INTO items(name, price) VALUES(?, ?) ", Statement.RETURN_GENERATED_KEYS);
             insert.setString(1, name);
