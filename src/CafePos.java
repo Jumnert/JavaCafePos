@@ -31,8 +31,16 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-
-
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.print.*;
+import java.awt.image.BufferedImage;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import java.io.File;
+import java.io.FileWriter;
+import java.awt.Desktop;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 
@@ -1098,286 +1106,150 @@ private int getItemId(String name, double price){
     }//GEN-LAST:event_jbtnResetActionPerformed
 
     private void jbtnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPrintActionPerformed
-           try {
-        // Choose save location
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Save Receipt");
-        fileChooser.setSelectedFile(new File("Receipt_" + System.currentTimeMillis() + ".pdf"));
+                                         
+    try {
+        // Create HTML receipt
+        StringBuilder html = new StringBuilder();
+        html.append("<!DOCTYPE html>");
+        html.append("<html><head>");
+        html.append("<meta charset='UTF-8'>");
+        html.append("<title>Receipt</title>");
+        html.append("<style>");
+        html.append("@media print {");
+        html.append("  @page { size: 80mm auto; margin: 0; }");
+        html.append("  body { margin: 0; padding: 10mm; }");
+        html.append("}");
+        html.append("body {");
+        html.append("  font-family: 'Courier New', monospace;");
+        html.append("  width: 80mm;");
+        html.append("  margin: 20px auto;");
+        html.append("  padding: 10mm;");
+        html.append("  background: white;");
+        html.append("  box-shadow: 0 0 10px rgba(0,0,0,0.1);");
+        html.append("}");
+        html.append(".center { text-align: center; }");
+        html.append(".bold { font-weight: bold; }");
+        html.append(".header { font-size: 16px; margin-bottom: 5px; }");
+        html.append(".small { font-size: 11px; }");
+        html.append(".line { border-top: 1px dashed #000; margin: 10px 0; }");
+        html.append(".row { display: flex; justify-content: space-between; margin: 5px 0; }");
+        html.append(".item-row { display: flex; justify-content: space-between; font-size: 12px; margin: 3px 0; }");
+        html.append(".item-name { flex: 1; }");
+        html.append(".item-qty { width: 30px; text-align: center; }");
+        html.append(".item-price { width: 60px; text-align: right; }");
+        html.append(".total-row { font-size: 14px; font-weight: bold; margin-top: 10px; }");
+        html.append(".footer { margin-top: 20px; font-size: 11px; }");
+        html.append("</style>");
+        html.append("</head><body>");
         
-        int choice = fileChooser.showSaveDialog(this);
-        if (choice != JFileChooser.APPROVE_OPTION) return;
-
-        String filePath = fileChooser.getSelectedFile().getAbsolutePath();
-        if (!filePath.toLowerCase().endsWith(".pdf")) {
-            filePath += ".pdf";
-        }
-
-        // Create PDF
-        PDDocument doc = new PDDocument();
-        PDPage page = new PDPage(new PDRectangle(226, 600)); // Thermal receipt size (80mm width)
-        doc.addPage(page);
-
-        PDPageContentStream content = new PDPageContentStream(doc, page);
-        PDType1Font fontBold = PDType1Font.HELVETICA_BOLD;
-        PDType1Font fontRegular = PDType1Font.HELVETICA;
-
-        float margin = 20;
-        float[] yPos = {570}; // Use array to make it effectively final
-        float pageWidth = page.getMediaBox().getWidth();
-
-        // ===== HEADER =====
-        yPos[0] -= 10;
+        // Header
+        html.append("<div class='center bold header'>FOREST CAFE</div>");
+        html.append("<div class='center small'>123 Main Street</div>");
+        html.append("<div class='center small'>ACLEDA AUB, Phnom Penh, Cambodia</div>");
+        html.append("<div class='center small'>Tel: +855 12 345 678</div>");
+        html.append("<div class='line'></div>");
         
-        // Cafe Name
-        content.setFont(fontBold, 12);
-        String title = "AMAZON FOREST CAFE";
-        float titleWidth = fontBold.getStringWidth(title) / 1000 * 12;
-        content.beginText();
-        content.newLineAtOffset((pageWidth - titleWidth) / 2, yPos[0]);
-        content.showText(title);
-        content.endText();
-        yPos[0] -= 14;
-        
-        // Address
-        content.setFont(fontRegular, 8);
-        String addr1 = "123 Main Street";
-        float addr1Width = fontRegular.getStringWidth(addr1) / 1000 * 8;
-        content.beginText();
-        content.newLineAtOffset((pageWidth - addr1Width) / 2, yPos[0]);
-        content.showText(addr1);
-        content.endText();
-        yPos[0] -= 10;
-        
-        String addr2 = "Phnom Penh, Cambodia";
-        float addr2Width = fontRegular.getStringWidth(addr2) / 1000 * 8;
-        content.beginText();
-        content.newLineAtOffset((pageWidth - addr2Width) / 2, yPos[0]);
-        content.showText(addr2);
-        content.endText();
-        yPos[0] -= 10;
-        
-        String phone = "Tel: +855 12 345 678";
-        float phoneWidth = fontRegular.getStringWidth(phone) / 1000 * 8;
-        content.beginText();
-        content.newLineAtOffset((pageWidth - phoneWidth) / 2, yPos[0]);
-        content.showText(phone);
-        content.endText();
-        yPos[0] -= 15;
-        
-        // Line
-        content.moveTo(margin, yPos[0]);
-        content.lineTo(pageWidth - margin, yPos[0]);
-        content.stroke();
-        yPos[0] -= 10;
-
-        // ===== DATE & TIME =====
+        // Date and Receipt Number
         String dateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
-        content.setFont(fontRegular, 8);
-        content.beginText();
-        content.newLineAtOffset(margin, yPos[0]);
-        content.showText("Date: " + dateTime);
-        content.endText();
-        yPos[0] -= 12;
-
-        // Receipt Number
         String receiptNo = "RCP" + System.currentTimeMillis();
-        content.beginText();
-        content.newLineAtOffset(margin, yPos[0]);
-        content.showText("Receipt: " + receiptNo);
-        content.endText();
-        yPos[0] -= 15;
-
-        // Line
-        content.moveTo(margin, yPos[0]);
-        content.lineTo(pageWidth - margin, yPos[0]);
-        content.stroke();
-        yPos[0] -= 10;
-
-        // ===== TABLE HEADER =====
-        content.setFont(fontBold, 9);
-        content.beginText();
-        content.newLineAtOffset(margin, yPos[0]);
-        content.showText("Item");
-        content.endText();
-
-        content.beginText();
-        content.newLineAtOffset(130, yPos[0]);
-        content.showText("Qty");
-        content.endText();
-
-        content.beginText();
-        content.newLineAtOffset(165, yPos[0]);
-        content.showText("Price");
-        content.endText();
-        yPos[0] -= 12;
-
-        // Line
-        content.moveTo(margin, yPos[0]);
-        content.lineTo(pageWidth - margin, yPos[0]);
-        content.stroke();
-        yPos[0] -= 8;
-
-        // ===== ITEMS =====
-        content.setFont(fontRegular, 8);
+        html.append("<div class='small'>Date: ").append(dateTime).append("</div>");
+        html.append("<div class='small'>Receipt: ").append(receiptNo).append("</div>");
+        html.append("<div class='line'></div>");
+        
+        // Table Header
+        html.append("<div class='item-row bold'>");
+        html.append("<div class='item-name'>Item</div>");
+        html.append("<div class='item-qty'>Qty</div>");
+        html.append("<div class='item-price'>Price</div>");
+        html.append("</div>");
+        html.append("<div class='line'></div>");
+        
+        // Items
         double subtotal = 0;
-
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             String item = jTable1.getValueAt(i, 0).toString();
             String qty = jTable1.getValueAt(i, 1).toString();
             String price = jTable1.getValueAt(i, 2).toString();
-
+            
             // Truncate long item names
-            if (item.length() > 20) {
-                item = item.substring(0, 17) + "...";
+            if (item.length() > 25) {
+                item = item.substring(0, 22) + "...";
             }
-
-            // Item name
-            content.beginText();
-            content.newLineAtOffset(margin, yPos[0]);
-            content.showText(item);
-            content.endText();
-
-            // Quantity
-            content.beginText();
-            content.newLineAtOffset(135, yPos[0]);
-            content.showText(qty);
-            content.endText();
-
-            // Price
-            content.beginText();
-            content.newLineAtOffset(160, yPos[0]);
-            content.showText("$" + price);
-            content.endText();
-
-            yPos[0] -= 12;
+            
+            html.append("<div class='item-row'>");
+            html.append("<div class='item-name'>").append(item).append("</div>");
+            html.append("<div class='item-qty'>").append(qty).append("</div>");
+            html.append("<div class='item-price'>$").append(price).append("</div>");
+            html.append("</div>");
+            
             subtotal += Double.parseDouble(price);
         }
-
-        yPos[0] -= 3;
         
-        // Line
-        content.moveTo(margin, yPos[0]);
-        content.lineTo(pageWidth - margin, yPos[0]);
-        content.stroke();
-        yPos[0] -= 10;
-
-        // ===== TOTALS =====
+        html.append("<div class='line'></div>");
+        
+        // Totals
         double tax = subtotal * 0.039;
         double total = subtotal + tax;
-
-        // Subtotal
-        content.setFont(fontRegular, 9);
-        content.beginText();
-        content.newLineAtOffset(margin, yPos[0]);
-        content.showText("Subtotal:");
-        content.endText();
-        content.beginText();
-        content.newLineAtOffset(150, yPos[0]);
-        content.showText(String.format("$ %.2f", subtotal));
-        content.endText();
-        yPos[0] -= 12;
-
-        // Tax
-        content.beginText();
-        content.newLineAtOffset(margin, yPos[0]);
-        content.showText("Tax (3.9%):");
-        content.endText();
-        content.beginText();
-        content.newLineAtOffset(150, yPos[0]);
-        content.showText(String.format("$ %.2f", tax));
-        content.endText();
-        yPos[0] -= 15;
-
-        // Total
-        content.setFont(fontBold, 11);
-        content.beginText();
-        content.newLineAtOffset(margin, yPos[0]);
-        content.showText("TOTAL:");
-        content.endText();
-        content.beginText();
-        content.newLineAtOffset(145, yPos[0]);
-        content.showText(String.format("$ %.2f", total));
-        content.endText();
-        yPos[0] -= 15;
-
-        // Line
-        content.moveTo(margin, yPos[0]);
-        content.lineTo(pageWidth - margin, yPos[0]);
-        content.stroke();
-        yPos[0] -= 10;
-
-        // ===== PAYMENT INFO =====
+        
+        html.append("<div class='row'>");
+        html.append("<span>Subtotal:</span>");
+        html.append("<span>").append(String.format("$ %.2f", subtotal)).append("</span>");
+        html.append("</div>");
+        
+        html.append("<div class='row'>");
+        html.append("<span>Tax (3.9%):</span>");
+        html.append("<span>").append(String.format("$ %.2f", tax)).append("</span>");
+        html.append("</div>");
+        
+        html.append("<div class='row total-row'>");
+        html.append("<span>TOTAL:</span>");
+        html.append("<span>").append(String.format("$ %.2f", total)).append("</span>");
+        html.append("</div>");
+        
+        html.append("<div class='line'></div>");
+        
+        // Payment Info
         String paymentMethod = jcbopayment.getSelectedItem().toString();
-        content.setFont(fontRegular, 8);
-        content.beginText();
-        content.newLineAtOffset(margin, yPos[0]);
-        content.showText("Payment: " + paymentMethod);
-        content.endText();
-        yPos[0] -= 12;
-
+        html.append("<div class='small'>Payment: ").append(paymentMethod).append("</div>");
+        
         if (paymentMethod.equals("Cash")) {
             String cashPaid = jtxtDisplay.getText();
             String change = jtxtChange.getText();
             
             if (!cashPaid.isEmpty()) {
-                content.beginText();
-                content.newLineAtOffset(margin, yPos[0]);
-                content.showText("Cash: " + cashPaid);
-                content.endText();
-                yPos[0] -= 12;
+                html.append("<div class='small'>Cash: ").append(cashPaid).append("</div>");
             }
-            
             if (!change.isEmpty()) {
-                content.beginText();
-                content.newLineAtOffset(margin, yPos[0]);
-                content.showText("Change: " + change);
-                content.endText();
-                yPos[0] -= 12;
+                html.append("<div class='small'>Change: ").append(change).append("</div>");
             }
         }
-
-        yPos[0] -= 5;
         
-        // Line
-        content.moveTo(margin, yPos[0]);
-        content.lineTo(pageWidth - margin, yPos[0]);
-        content.stroke();
-        yPos[0] -= 15;
-
-        // ===== FOOTER =====
-        content.setFont(fontBold, 9);
-        String thanks = "Thank You for Your Visit!";
-        float thanksWidth = fontBold.getStringWidth(thanks) / 1000 * 9;
-        content.beginText();
-        content.newLineAtOffset((pageWidth - thanksWidth) / 2, yPos[0]);
-        content.showText(thanks);
-        content.endText();
-        yPos[0] -= 12;
+        html.append("<div class='line'></div>");
         
-        content.setFont(fontRegular, 8);
-        String comeAgain = "Please Come Again";
-        float comeAgainWidth = fontRegular.getStringWidth(comeAgain) / 1000 * 8;
-        content.beginText();
-        content.newLineAtOffset((pageWidth - comeAgainWidth) / 2, yPos[0]);
-        content.showText(comeAgain);
-        content.endText();
-        yPos[0] -= 12;
+        // Footer
+        html.append("<div class='center bold footer'>Thank You for Your Visit!</div>");
+        html.append("<div class='center small footer'>Please Come Again</div>");
+        html.append("<div class='center small footer'>www.forestcafe.com</div>");
         
-        String website = "www.amazonforestcafe.com";
-        float websiteWidth = fontRegular.getStringWidth(website) / 1000 * 8;
-        content.beginText();
-        content.newLineAtOffset((pageWidth - websiteWidth) / 2, yPos[0]);
-        content.showText(website);
-        content.endText();
-
-        content.close();
-        doc.save(filePath);
-        doc.close();
-
-        JOptionPane.showMessageDialog(this, 
-            "Receipt saved successfully!\n" + filePath,
-            "Success",
-            JOptionPane.INFORMATION_MESSAGE);
+        html.append("</body></html>");
+        
+        // Save to temp file and open in browser
+        File tempFile = File.createTempFile("receipt_", ".html");
+        tempFile.deleteOnExit();
+        
+        try (FileWriter writer = new FileWriter(tempFile)) {
+            writer.write(html.toString());
+        }
+        
+        // Open in default browser
+        if (Desktop.isDesktopSupported()) {
+            Desktop.getDesktop().browse(tempFile.toURI());
+        } else {
+            JOptionPane.showMessageDialog(this,
+                "Receipt saved to: " + tempFile.getAbsolutePath(),
+                "Success",
+                JOptionPane.INFORMATION_MESSAGE);
+        }
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, 

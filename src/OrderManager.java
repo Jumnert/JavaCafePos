@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class OrderManager {
     
-    private int currentUserId = 1; // Default to admin, should be set after login
+    private int currentUserId = 1; 
     
     public void setCurrentUserId(int userId) {
         this.currentUserId = userId;
