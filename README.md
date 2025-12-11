@@ -9,7 +9,7 @@ It supports adding items, calculating totals, and generating professional PDF re
 
 Here is a preview of the application in its current state(Finished):
 
-![JavaCafePos Screenshot](./screenshots/tk.png)
+![JavaCafePos Screenshot](./screenshots/ss.png)
 
 *Screenshot shows the main UI with item table and PDF receipt generation.*
 
