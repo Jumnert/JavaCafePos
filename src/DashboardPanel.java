@@ -19,7 +19,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 public class DashboardPanel extends JFrame {
 
-    // --- UI Components ---
+    // --- UI Components --- or classes
     private final JLabel lblTodaySales = createValueLabel();
     private final JLabel lblTotalRevenue = createValueLabel(); // Renamed for clarity based on period
     private final JLabel lblTotalOrders = createValueLabel();
@@ -38,11 +38,11 @@ public class DashboardPanel extends JFrame {
     private final JTable tblRecentOrders = new JTable();
     private final JTable tblPaymentMethods = new JTable();
 
-    // Database & Formatting
+    // Database
     private final Db db = new Db();
     private final NumberFormat currency = NumberFormat.getCurrencyInstance(Locale.US);
 
-    // --- Colors (Material Design) ---
+    //Color Delcare
     private final Color PRIMARY = new Color(3, 102, 87);
     private final Color ACCENT = new Color(52, 168, 83);
     private final Color CARD_BG = Color.WHITE;
@@ -102,9 +102,8 @@ public class DashboardPanel extends JFrame {
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         right.setOpaque(false);
         right.add(new JLabel("Period:"));
-        
         cmbPeriod = new JComboBox<>(new String[]{"Today", "Yesterday", "This Week", "This Month", "Last Month", "All Time"});
-        cmbPeriod.setSelectedIndex(3); // Default to This Month
+        cmbPeriod.setSelectedIndex(3); 
         cmbPeriod.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         cmbPeriod.setBackground(Color.WHITE);
         cmbPeriod.addActionListener(e -> refreshData((String) cmbPeriod.getSelectedItem()));
@@ -123,8 +122,6 @@ public class DashboardPanel extends JFrame {
         JPanel panel = new JPanel(new GridLayout(1, 6, 12, 12));
         panel.setOpaque(false);
         panel.setPreferredSize(new Dimension(0, 110));
-
-        // Note: Logic allows these cards to update based on the dropdown selection
         panel.add(makeCard("Period Revenue", lblTotalRevenue, "Total sales for selection", new Color(76, 175, 80)));
         panel.add(makeCard("Total Orders", lblTotalOrders, "Count for selection", new Color(33, 150, 243)));
         panel.add(makeCard("Avg Ticket", lblAvgOrder, "Revenue / Orders", new Color(156, 39, 176)));
@@ -251,7 +248,7 @@ public class DashboardPanel extends JFrame {
 
     private void refreshData(String period) {
         SwingWorker<Void, Void> worker = new SwingWorker<>() {
-            // Data holders
+            // Declare
             String revenue = "$0.00";
             String todaySales = "$0.00";
             String totalOrders = "0";
@@ -271,7 +268,7 @@ public class DashboardPanel extends JFrame {
                     
                     // 1. KPI Cards
                     fetchKPIData(conn, dateCondition);
-                    fetchTodaySales(conn); // Always fetch today specifically for the "Today" card
+                    fetchTodaySales(conn); //Auto fetch : (i alr fix thsi code)
 
                     // 2. Charts
                     fetchSalesChartData(conn, period, dateCondition, salesDataset);
@@ -303,8 +300,7 @@ public class DashboardPanel extends JFrame {
                         avgOrder = cnt > 0 ? currency.format(rev / cnt) : "$0.00";
                     }
                 }
-
-                // Best Seller (Single Item)
+                //Best Seller Query
                 String sqlBest = "SELECT i.name FROM order_items oi " +
                         "JOIN orders o ON oi.order_id = o.order_id " +
                         "JOIN items i ON oi.item_id = i.item_id " +
@@ -313,15 +309,10 @@ public class DashboardPanel extends JFrame {
                 try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sqlBest)) {
                     if (rs.next()) bestSeller = rs.getString("name");
                 }
-                
-                // Top Payment
+                // Top Payment (Currently Not working
                 String sqlPay = "SELECT payment_method FROM orders WHERE 1=1 " + cond + 
                                 " GROUP BY payment_method ORDER BY COUNT(*) DESC LIMIT 1"; // Note: Orders table usually has payment_method. If not, adjust.
-                // NOTE: Based on provided structure, I'm assuming 'orders' has 'payment_method'. 
-                // If not, and it's in a separate payment table, this query needs adjustment.
-                // Assuming standard structure for now.
-                try (Statement stmt = conn.createStatement()) {
-                    // Check if column exists first to avoid crash if schema differs
+                try (Statement stmt = conn.createStatement()) {                 
                     try(ResultSet rs = stmt.executeQuery(sqlPay)){
                         if (rs.next()) topPayment = rs.getString(1);
                     } catch (SQLException ignored) { topPayment = "N/A"; }
@@ -338,16 +329,13 @@ public class DashboardPanel extends JFrame {
             private void fetchSalesChartData(Connection conn, String period, String cond, DefaultCategoryDataset ds) throws SQLException {
                String sql;
                 boolean isDayView = period.equals("Today") || period.equals("Yesterday");
-
-                // FIX: We use DATE_FORMAT for both Selecting and Grouping.
-                // This satisfies the "only_full_group_by" rule.
                 if (isDayView) {
-                    // Group by Hour (e.g., "14:00")
+                    // Group by Hour 
                     sql = "SELECT DATE_FORMAT(order_date, '%H:00') as lbl, SUM(total_amount) as val " +
                           "FROM orders WHERE 1=1 " + cond + 
                           " GROUP BY lbl ORDER BY lbl";
                 } else {
-                    // Group by Date (e.g., "27/11")
+                    // Group by Date
                     sql = "SELECT DATE_FORMAT(order_date, '%d/%m') as lbl, DATE(order_date) as sort_date, SUM(total_amount) as val " +
                           "FROM orders WHERE 1=1 " + cond + 
                           " GROUP BY lbl, sort_date ORDER BY sort_date";
@@ -388,7 +376,7 @@ public class DashboardPanel extends JFrame {
                 String[] cols = {"ID", "Date", "Total", "Items"}; // Simplified columns based on known schema
                 model.setColumnIdentifiers(cols);
                 
-                // Getting items count per order requires subquery or group by, simplifying for performance
+                // Getting items count per order 
                 String sql = "SELECT o.order_id, o.order_date, o.total_amount, " +
                              "(SELECT COUNT(*) FROM order_items WHERE order_id = o.order_id) as item_count " +
                              "FROM orders o ORDER BY o.order_date DESC LIMIT 15";
@@ -412,7 +400,7 @@ public class DashboardPanel extends JFrame {
                 String[] cols = {"Method", "Txns", "Amount"};
                 model.setColumnIdentifiers(cols);
                 
-                // Assuming payment_method exists in orders. If not, this might fail, handled by try-catch
+           
                 String sql = "SELECT payment_method, COUNT(*) as txns, SUM(total_amount) as total " +
                              "FROM orders WHERE 1=1 " + cond + 
                              " GROUP BY payment_method";
@@ -463,7 +451,6 @@ public class DashboardPanel extends JFrame {
             case "Yesterday":
                 return " AND DATE(order_date) = CURDATE() - INTERVAL 1 DAY";
             case "This Week":
-                // MySQL YearWeek mode 1 (Monday first day)
                 return " AND YEARWEEK(order_date, 1) = YEARWEEK(CURDATE(), 1)";
             case "This Month":
                 return " AND MONTH(order_date) = MONTH(CURDATE()) AND YEAR(order_date) = YEAR(CURDATE())";
@@ -480,15 +467,14 @@ public class DashboardPanel extends JFrame {
 
     private void updateSalesChart(DefaultCategoryDataset dataset, String period) {
         JFreeChart chart = ChartFactory.createLineChart(
-                "Sales Trend (" + period + ")", // Title
-                period.contains("Today") ? "Hour" : "Date", // X-Axis Label
-                "Revenue", // Y-Axis Label
+                "Sales Trend (" + period + ")", 
+                period.contains("Today") ? "Hour" : "Date", // 
+                "Revenue", 
                 dataset,
                 PlotOrientation.VERTICAL,
                 false, true, false
         );
 
-        // Styling
         chart.setBackgroundPaint(Color.WHITE);
         CategoryPlot plot = chart.getCategoryPlot();
         plot.setBackgroundPaint(Color.WHITE);
@@ -499,7 +485,7 @@ public class DashboardPanel extends JFrame {
         renderer.setSeriesPaint(0, PRIMARY);
         renderer.setSeriesStroke(0, new BasicStroke(2.0f));
         
-        // Axis styling
+       
         CategoryAxis domainAxis = plot.getDomainAxis();
         domainAxis.setTickLabelFont(new Font("Segoe UI", Font.PLAIN, 11));
         
@@ -519,7 +505,7 @@ public class DashboardPanel extends JFrame {
                 null,
                 "Qty Sold",
                 dataset,
-                PlotOrientation.HORIZONTAL, // Horizontal bars read better for names
+                PlotOrientation.HORIZONTAL, 
                 false, true, false
         );
 
@@ -531,7 +517,7 @@ public class DashboardPanel extends JFrame {
 
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setSeriesPaint(0, ACCENT);
-        renderer.setBarPainter(new StandardBarPainter()); // Flat look
+        renderer.setBarPainter(new StandardBarPainter()); 
         renderer.setDrawBarOutline(false);
 
         ChartPanel cp = new ChartPanel(chart);
@@ -558,7 +544,7 @@ public class DashboardPanel extends JFrame {
     private static class Db {
         private final String URL = "jdbc:mysql://localhost:3306/cafepos?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
         private final String USER = "root";
-        private final String PASS = "nith2020"; // Password from your prompt
+        private final String PASS = "nith2020"; 
 
         Db() {
             try {

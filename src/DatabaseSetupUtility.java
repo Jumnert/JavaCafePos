@@ -46,7 +46,7 @@ public class DatabaseSetupUtility {
             ResultSet rs = checkPst.executeQuery();
             
             if (rs.next()) {
-                System.out.println("❌ Admin account already exists!");
+                System.out.println("[X] Admin account already exists!");
                 return;
             }
             
@@ -61,16 +61,16 @@ public class DatabaseSetupUtility {
             int result = insertPst.executeUpdate();
             
             if (result > 0) {
-                System.out.println("✅ Default admin account created successfully!");
-                System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                System.out.println("📋 ADMIN CREDENTIALS:");
+                System.out.println("[OK] Default admin account created successfully!");
+                System.out.println("========================================");
+                System.out.println("ADMIN CREDENTIALS:");
                 System.out.println("   Username: " + defaultUsername);
                 System.out.println("   Password: " + defaultPassword);
-                System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                System.out.println("⚠️  IMPORTANT: Change this password immediately after first login!");
+                System.out.println("========================================");
+                System.out.println("WARNING: Change this password immediately after first login!");
             }
         } catch (SQLException e) {
-            System.err.println("❌ Error creating admin account: " + e.getMessage());
+            System.err.println("[ERROR] Error creating admin account: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -82,19 +82,19 @@ public class DatabaseSetupUtility {
     public static void generatePasswordHash() {
         Scanner scanner = new Scanner(System.in);
         
-        System.out.println("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.println("🔐 PASSWORD HASH GENERATOR");
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("\n========================================");
+        System.out.println("PASSWORD HASH GENERATOR");
+        System.out.println("========================================");
         
         System.out.print("Enter password to hash: ");
         String password = scanner.nextLine();
         
         String hash = hashPassword(password);
         
-        System.out.println("\n✅ Password Hash Generated:");
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("\n[OK] Password Hash Generated:");
+        System.out.println("========================================");
         System.out.println(hash);
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("========================================");
         System.out.println("\nYou can use this hash in SQL INSERT statements:");
         System.out.println("INSERT INTO users (username, password_hash, role) VALUES ('username', '" + hash + "', 'admin');");
     }
@@ -108,9 +108,9 @@ public class DatabaseSetupUtility {
             PreparedStatement pst = conn.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
             
-            System.out.println("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            System.out.println("👥 MANAGER & ADMIN ACCOUNTS");
-            System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            System.out.println("\n====================================================");
+            System.out.println("MANAGER & ADMIN ACCOUNTS");
+            System.out.println("====================================================");
             
             boolean found = false;
             while (rs.next()) {
@@ -122,39 +122,39 @@ public class DatabaseSetupUtility {
                 String role = rs.getString("role");
                 boolean isActive = rs.getBoolean("is_active");
                 
-                String status = isActive ? "✅ Active" : "❌ Inactive";
-                String roleIcon = role.equals("admin") ? "👑" : "👔";
+                String status = isActive ? "[Active]" : "[Inactive]";
+                String roleIcon = role.equals("admin") ? "[ADMIN]" : "[MANAGER]";
                 
                 System.out.println(String.format("\n%s ID: %d | Role: %s", roleIcon, userId, role.toUpperCase()));
                 System.out.println("   Username: " + username);
                 System.out.println("   Full Name: " + fullName);
                 System.out.println("   Email: " + email);
                 System.out.println("   Status: " + status);
-                System.out.println("   ───────────────────────────────────────────────");
+                System.out.println("   ----------------------------------------");
             }
             
             if (!found) {
-                System.out.println("\n⚠️  No manager or admin accounts found!");
+                System.out.println("\n[!] No manager or admin accounts found!");
                 System.out.println("   Run createDefaultAdmin() to create one.");
             }
             
-            System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+            System.out.println("====================================================\n");
             
         } catch (SQLException e) {
-            System.err.println("❌ Error listing accounts: " + e.getMessage());
+            System.err.println("[ERROR] Error listing accounts: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     /**
-     * UTILITY 4: Create a new manager account interactively
+     * UTILITY 4: Create manager account 
      */
     public static void createManagerAccount() {
         Scanner scanner = new Scanner(System.in);
         
-        System.out.println("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.println("👔 CREATE NEW MANAGER ACCOUNT");
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("\n========================================");
+        System.out.println("CREATE NEW MANAGER ACCOUNT");
+        System.out.println("========================================");
         
         System.out.print("Full Name: ");
         String fullName = scanner.nextLine();
@@ -172,7 +172,7 @@ public class DatabaseSetupUtility {
         String role = scanner.nextLine().toLowerCase();
         
         if (!role.equals("admin") && !role.equals("manager")) {
-            System.out.println("❌ Invalid role! Must be 'admin' or 'manager'");
+            System.out.println("[ERROR] Invalid role! Must be 'admin' or 'manager'");
             return;
         }
         
@@ -184,7 +184,7 @@ public class DatabaseSetupUtility {
             ResultSet rs = checkPst.executeQuery();
             
             if (rs.next()) {
-                System.out.println("❌ Username already exists!");
+                System.out.println("[ERROR] Username already exists!");
                 return;
             }
             
@@ -200,14 +200,14 @@ public class DatabaseSetupUtility {
             int result = insertPst.executeUpdate();
             
             if (result > 0) {
-                System.out.println("\n✅ Account created successfully!");
-                System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                System.out.println("\n[OK] Account created successfully!");
+                System.out.println("========================================");
                 System.out.println("Username: " + username);
                 System.out.println("Role: " + role);
-                System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                System.out.println("========================================");
             }
         } catch (SQLException e) {
-            System.err.println("❌ Error creating account: " + e.getMessage());
+            System.err.println("[ERROR] Error creating account: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -218,9 +218,9 @@ public class DatabaseSetupUtility {
     public static void resetPassword() {
         Scanner scanner = new Scanner(System.in);
         
-        System.out.println("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        System.out.println("🔑 RESET USER PASSWORD");
-        System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("\n========================================");
+        System.out.println("RESET USER PASSWORD");
+        System.out.println("========================================");
         
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
@@ -237,12 +237,12 @@ public class DatabaseSetupUtility {
             int result = pst.executeUpdate();
             
             if (result > 0) {
-                System.out.println("\n✅ Password reset successfully for user: " + username);
+                System.out.println("\n[OK] Password reset successfully for user: " + username);
             } else {
-                System.out.println("\n❌ User not found: " + username);
+                System.out.println("\n[ERROR] User not found: " + username);
             }
         } catch (SQLException e) {
-            System.err.println("❌ Error resetting password: " + e.getMessage());
+            System.err.println("[ERROR] Error resetting password: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -254,16 +254,16 @@ public class DatabaseSetupUtility {
         Scanner scanner = new Scanner(System.in);
         
         while (true) {
-            System.out.println("\n╔═══════════════════════════════════════════════╗");
-            System.out.println("║   🌲 FOREST CAFE DATABASE UTILITY 🌲          ║");
-            System.out.println("╚═══════════════════════════════════════════════╝");
+            System.out.println("\n================================================");
+            System.out.println(" DATABASE UTILITY");
+            System.out.println("================================================");
             System.out.println("\n[1] Create Default Admin Account");
             System.out.println("[2] List All Manager/Admin Accounts");
             System.out.println("[3] Create New Manager Account");
             System.out.println("[4] Generate Password Hash");
             System.out.println("[5] Reset User Password");
             System.out.println("[0] Exit");
-            System.out.println("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            System.out.println("\n------------------------------------------------");
             System.out.print("Select option: ");
             
             String choice = scanner.nextLine();
@@ -285,10 +285,10 @@ public class DatabaseSetupUtility {
                     resetPassword();
                     break;
                 case "0":
-                    System.out.println("\n👋 Goodbye!");
+                    System.out.println("\nGoodbye!");
                     return;
                 default:
-                    System.out.println("\n❌ Invalid option!");
+                    System.out.println("\n[ERROR] Invalid option!");
             }
         }
     }
